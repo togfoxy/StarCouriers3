@@ -1,4 +1,4 @@
-GAME_VERSION = "0.04"
+GAME_VERSION = "0.01"
 
 inspect = require 'lib.inspect'
 -- https://github.com/kikito/inspect.lua
@@ -27,19 +27,49 @@ baton = require 'lib.baton'
 
 cf = require 'lib.commonfunctions'
 fun = require 'functions'
--- draw = require 'draw'
+draw = require 'draw'
 constants = require 'constants'
 -- comp = require 'components'
 -- ecsDraw = require 'ecsDraw'
 -- ecsUpdate = require 'ecsUpdate'
 -- fileops = require 'fileoperations'
 -- keymaps = require 'keymaps'
--- buttons = require 'buttons'
+buttons = require 'buttons'
 
 function love.keyreleased( key, scancode )
 	if key == "escape" then
 		cf.RemoveScreen(SCREEN_STACK)
     end
+end
+
+function love.mousereleased( x, y, button, istouch, presses )
+
+	if button == 1 then
+		local currentScreen = cf.currentScreenName(SCREEN_STACK)
+		if currentScreen == enum.sceneMainMenu then
+			local rx, ry = res.toGame(x,y)		-- does this need to be applied consistently across all mouse clicks?
+			for k, button in pairs(GUI_BUTTONS) do
+				if button.scene == enum.sceneMainMenu and button.visible then
+					-- get the id of the button that was clicked
+					local mybuttonID = buttons.getButtonClicked(rx, ry, currentScreen, GUI_BUTTONS)		-- bounding box stuff
+					if mybuttonID == enum.buttonNewGame then
+						-- fun.InitialiseGame()
+						-- cf.AddScreen(enum.sceneAsteroid, SCREEN_STACK)
+						-- break
+					-- elseif mybuttonID == enum.buttonSaveGame then
+					-- 	fileops.saveGame()
+					-- 	break
+					-- elseif mybuttonID == enum.buttonLoadGame then
+					-- 	fileops.loadGame()
+					-- 	cf.AddScreen(enum.sceneAsteroid, SCREEN_STACK)
+					-- 	break
+					-- elseif mybuttonID == enum.buttonCredits then
+					-- 	cf.AddScreen(enum.sceneCredits, SCREEN_STACK)
+					end
+				end
+			end
+		end
+	end
 end
 
 function love.load()
@@ -61,7 +91,7 @@ function love.load()
 	fun.loadImages()
 	fun.loadFonts()
 
-	-- buttons.loadButtons()			-- the buttons that are displayed on different gui's
+	buttons.load()			-- the buttons that are displayed on different gui's
 	-- keymaps.init()
     -- cmp.init()
 
@@ -73,7 +103,7 @@ function love.draw()
 
     local currentscreen = cf.currentScreenName(SCREEN_STACK)
 	if currentscreen == enum.sceneMainMenu then
-
+		draw.mainMenu()
     elseif currentscreen == enum.sceneAsteroids then
 
     end
