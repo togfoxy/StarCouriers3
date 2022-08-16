@@ -91,6 +91,13 @@ function love.wheelmoved(x, y)
 	-- BUBBLE = {}
 end
 
+function love.mousemoved( x, y, dx, dy, istouch )
+	if love.mouse.isDown(3) then
+		TRANSLATEX = TRANSLATEX - (dx * 3)
+		TRANSLATEY = TRANSLATEY - (dy * 3)
+	end
+end
+
 function love.load()
 
 	constants.load()

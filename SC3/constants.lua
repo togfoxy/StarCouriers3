@@ -5,7 +5,7 @@ function constants.load()
     SCREEN_WIDTH = 1920
     SCREEN_HEIGHT = 1080
 
-    FIELD_WIDTH = 1000	-- metres
+    FIELD_WIDTH = 1500	-- metres
     FIELD_HEIGHT = 2000	-- metres
     FIELD_SAFEZONE = 100	-- this is 1oo metres height on/near the spacedock
 
