@@ -30,11 +30,12 @@ fun = require 'functions'
 draw = require 'draw'
 constants = require 'constants'
 -- comp = require 'components'
--- ecsDraw = require 'ecsDraw'
--- ecsUpdate = require 'ecsUpdate'
+ecsDraw = require 'ecsDraw'
+ecsUpdate = require 'ecsUpdate'
 -- fileops = require 'fileoperations'
 -- keymaps = require 'keymaps'
 buttons = require 'buttons'
+physics = require 'physics'
 
 function love.keyreleased( key, scancode )
 	if key == "escape" then
@@ -53,7 +54,7 @@ function love.mousereleased( x, y, button, istouch, presses )
 					-- get the id of the button that was clicked
 					local mybuttonID = buttons.getButtonClicked(rx, ry, currentScreen, GUI_BUTTONS)		-- bounding box stuff
 					if mybuttonID == enum.buttonNewGame then
-						-- fun.InitialiseGame()
+						fun.InitialiseGame()
 						-- cf.AddScreen(enum.sceneAsteroid, SCREEN_STACK)
 						-- break
 					-- elseif mybuttonID == enum.buttonSaveGame then
