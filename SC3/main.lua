@@ -29,12 +29,13 @@ cf = require 'lib.commonfunctions'
 fun = require 'functions'
 draw = require 'draw'
 constants = require 'constants'
--- comp = require 'components'
--- ecsDraw = require 'ecsDraw'
--- ecsUpdate = require 'ecsUpdate'
+comp = require 'components'
+ecsDraw = require 'ecsDraw'
+ecsUpdate = require 'ecsUpdate'
 -- fileops = require 'fileoperations'
 -- keymaps = require 'keymaps'
 buttons = require 'buttons'
+physics = require 'physics'
 
 function love.keyreleased( key, scancode )
 	if key == "escape" then
@@ -53,9 +54,9 @@ function love.mousereleased( x, y, button, istouch, presses )
 					-- get the id of the button that was clicked
 					local mybuttonID = buttons.getButtonClicked(rx, ry, currentScreen, GUI_BUTTONS)		-- bounding box stuff
 					if mybuttonID == enum.buttonNewGame then
-						-- fun.InitialiseGame()
-						-- cf.AddScreen(enum.sceneAsteroid, SCREEN_STACK)
-						-- break
+						fun.InitialiseGame()
+						cf.AddScreen(enum.sceneAsteroids, SCREEN_STACK)
+						break
 					-- elseif mybuttonID == enum.buttonSaveGame then
 					-- 	fileops.saveGame()
 					-- 	break
@@ -69,6 +70,31 @@ function love.mousereleased( x, y, button, istouch, presses )
 				end
 			end
 		end
+	end
+end
+
+function love.wheelmoved(x, y)
+	if y > 0 then
+		-- wheel moved up. Zoom in
+		ZOOMFACTOR = ZOOMFACTOR + 0.1
+		if ZOOMFACTOR == 0.6 then ZOOMFACTOR = 0.7 end
+	end
+	if y < 0 then
+		ZOOMFACTOR = ZOOMFACTOR - 0.1
+		if ZOOMFACTOR == 0.6 then ZOOMFACTOR = 0.5 end
+	end
+	if ZOOMFACTOR < 0.1 then ZOOMFACTOR = 0.1 end
+	--if ZOOMFACTOR > 4 then ZOOMFACTOR = 4 end
+	print("Zoom factor is now ".. ZOOMFACTOR)
+
+	-- delete the bubbles to stop them being drawn funny on zoom change
+	-- BUBBLE = {}
+end
+
+function love.mousemoved( x, y, dx, dy, istouch )
+	if love.mouse.isDown(3) then
+		TRANSLATEX = TRANSLATEX - (dx * 3)
+		TRANSLATEY = TRANSLATEY - (dy * 3)
 	end
 end
 
@@ -93,7 +119,7 @@ function love.load()
 
 	buttons.load()			-- the buttons that are displayed on different gui's
 	-- keymaps.init()
-    -- cmp.init()
+    comp.init()
 
 	cf.AddScreen(enum.sceneMainMenu, SCREEN_STACK)
 end
@@ -105,7 +131,7 @@ function love.draw()
 	if currentscreen == enum.sceneMainMenu then
 		draw.mainMenu()
     elseif currentscreen == enum.sceneAsteroids then
-
+		draw.asteroids()
     end
     lovelyToasts.draw()
     res.stop()
@@ -131,6 +157,9 @@ function love.update(dt)
 
 
 		-- input:update()     -- baton key maps
+
+		cam:setPos(TRANSLATEX, TRANSLATEY)
+		cam:setZoom(ZOOMFACTOR)
     end
 
     lovelyToasts.update(dt)
