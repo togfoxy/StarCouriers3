@@ -99,6 +99,7 @@ function functions.InitialiseGame()
 	TRANSLATEX = (x1 * BOX2D_SCALE)
 	TRANSLATEY = (y1 * BOX2D_SCALE)
     ZOOMFACTOR = 0.4
+
 end
 
 function functions.getEntity(uid)

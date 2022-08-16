@@ -26,7 +26,7 @@ function constants.load()
 	ECSWORLD = {}
 	RECEIPT = {}
     PLAYER = {}
-
+    BUBBLE = {}
 
     enum = {}               -- global
     enum.sceneMainMenu = 1

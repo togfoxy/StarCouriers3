@@ -73,6 +73,24 @@ function love.mousereleased( x, y, button, istouch, presses )
 	end
 end
 
+function love.wheelmoved(x, y)
+	if y > 0 then
+		-- wheel moved up. Zoom in
+		ZOOMFACTOR = ZOOMFACTOR + 0.1
+		if ZOOMFACTOR == 0.6 then ZOOMFACTOR = 0.7 end
+	end
+	if y < 0 then
+		ZOOMFACTOR = ZOOMFACTOR - 0.1
+		if ZOOMFACTOR == 0.6 then ZOOMFACTOR = 0.5 end
+	end
+	if ZOOMFACTOR < 0.1 then ZOOMFACTOR = 0.1 end
+	--if ZOOMFACTOR > 4 then ZOOMFACTOR = 4 end
+	print("Zoom factor is now ".. ZOOMFACTOR)
+
+	-- delete the bubbles to stop them being drawn funny on zoom change
+	-- BUBBLE = {}
+end
+
 function love.load()
 
 	constants.load()
@@ -132,6 +150,9 @@ function love.update(dt)
 
 
 		-- input:update()     -- baton key maps
+
+		cam:setPos(TRANSLATEX, TRANSLATEY)
+		cam:setZoom(ZOOMFACTOR)
     end
 
     lovelyToasts.update(dt)

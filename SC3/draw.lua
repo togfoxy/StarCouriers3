@@ -26,8 +26,12 @@ function draw.mainMenu()
 end
 
 function draw.asteroids()
+	cam:attach()
+
+	cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
 
 
+	cam:detach()
 end
 
 return draw
