@@ -29,7 +29,7 @@ cf = require 'lib.commonfunctions'
 fun = require 'functions'
 draw = require 'draw'
 constants = require 'constants'
--- comp = require 'components'
+comp = require 'components'
 ecsDraw = require 'ecsDraw'
 ecsUpdate = require 'ecsUpdate'
 -- fileops = require 'fileoperations'
@@ -55,8 +55,8 @@ function love.mousereleased( x, y, button, istouch, presses )
 					local mybuttonID = buttons.getButtonClicked(rx, ry, currentScreen, GUI_BUTTONS)		-- bounding box stuff
 					if mybuttonID == enum.buttonNewGame then
 						fun.InitialiseGame()
-						-- cf.AddScreen(enum.sceneAsteroid, SCREEN_STACK)
-						-- break
+						cf.AddScreen(enum.sceneAsteroids, SCREEN_STACK)
+						break
 					-- elseif mybuttonID == enum.buttonSaveGame then
 					-- 	fileops.saveGame()
 					-- 	break
@@ -94,7 +94,7 @@ function love.load()
 
 	buttons.load()			-- the buttons that are displayed on different gui's
 	-- keymaps.init()
-    -- cmp.init()
+    comp.init()
 
 	cf.AddScreen(enum.sceneMainMenu, SCREEN_STACK)
 end
@@ -106,7 +106,7 @@ function love.draw()
 	if currentscreen == enum.sceneMainMenu then
 		draw.mainMenu()
     elseif currentscreen == enum.sceneAsteroids then
-
+		draw.asteroids()
     end
     lovelyToasts.draw()
     res.stop()

@@ -25,4 +25,9 @@ function draw.mainMenu()
 	end
 end
 
+function draw.asteroids()
+
+
+end
+
 return draw

@@ -25,6 +25,7 @@ function constants.load()
 	SHOPWORLD = {}
 	ECSWORLD = {}
 	RECEIPT = {}
+    PLAYER = {}
 
 
     enum = {}               -- global

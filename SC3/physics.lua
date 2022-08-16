@@ -1,5 +1,64 @@
 physics = {}
 
+local function establishPlayerVessel()
+	-- add player
+	local entity = concord.entity(ECSWORLD)
+    :give("drawable")
+    :give("uid")
+
+	:give("chassis")
+	:give("engine")
+	:give("fuelTank")
+	:give("miningLaser")
+	:give("battery")
+	:give("oxyGenerator")
+	:give("cargoHold")
+
+	-- :give("leftThruster")
+	-- :give("rightThruster")
+	-- :give("reverseThruster")
+	-- :give("oxyTank")
+	-- :give("solarPanel")
+	-- :give("spaceSuit")
+	-- :give("SOSBeacon")
+	-- :give("Stabiliser")
+	-- :give("ejectionPod")
+
+    table.insert(ECS_ENTITIES, entity)
+	PLAYER.UID = entity.uid.value 		-- store this for easy recall
+
+	-- debug
+	-- PLAYER.WEALTH = 10000
+	-- entity.chassis.currentHP = 0
+	-- entity.battery.capacity = 10
+
+
+	local shipsize = fun.getEntitySize(entity)
+	-- DEBUG_VESSEL_SIZE = 10
+	-- shipsize = DEBUG_VESSEL_SIZE
+
+	local physicsEntity = {}
+    physicsEntity.body = love.physics.newBody(PHYSICSWORLD, PHYSICS_WIDTH / 2, (PHYSICS_HEIGHT) - 75, "dynamic")
+	physicsEntity.body:setLinearDamping(0)
+	-- physicsEntity.body:setMass(500)		-- kg		-- made redundant by newFixture
+	physicsEntity.shape = love.physics.newRectangleShape(shipsize, shipsize)		-- will draw a rectangle around the body x/y. No need to offset it
+	-- physicsEntity.shape = love.physics.newPolygonShape(PLAYER.POINTS)
+	physicsEntity.fixture = love.physics.newFixture(physicsEntity.body, physicsEntity.shape, PHYSICS_DENSITY)		-- the 1 is the density
+	physicsEntity.fixture:setRestitution(0.1)		-- between 0 and 1
+	physicsEntity.fixture:setSensor(false)
+
+	local temptable = {}
+	temptable.uid = entity.uid.value
+	temptable.objectType = "Player"						-- other type is "Pod"
+	physicsEntity.fixture:setUserData(temptable)		-- links the physics object to the ECS entity
+
+
+    table.insert(PHYSICS_ENTITIES, physicsEntity)
+
+	print("Ship mass is " .. physicsEntity.body:getMass())
+	print("Ship size is " .. shipsize)
+end
+
 function physics.killPhysicsEntity(physEntity)
 	-- used on rocks and other things
 	-- receives a physics entity
@@ -88,6 +147,31 @@ local function establishStarbase()
     table.insert(PHYSICS_ENTITIES, starbase)
 end
 
+local function establishPlayerPhysics()
+    local entity = fun.getEntity(PLAYER.UID)
+    local shipsize = fun.getEntitySize(entity)
+	-- DEBUG_VESSEL_SIZE = 10
+	-- shipsize = DEBUG_VESSEL_SIZE
+
+	local physicsEntity = {}
+    physicsEntity.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, (FIELD_HEIGHT) - 75, "dynamic")
+	physicsEntity.body:setLinearDamping(0)
+	physicsEntity.shape = love.physics.newRectangleShape(shipsize, shipsize)		-- will draw a rectangle around the body x/y. No need to offset it
+	physicsEntity.fixture = love.physics.newFixture(physicsEntity.body, physicsEntity.shape, PHYSICS_DENSITY)		-- the 1 is the density
+	physicsEntity.fixture:setRestitution(0.1)		-- between 0 and 1
+	physicsEntity.fixture:setSensor(false)
+
+	local temptable = {}
+	temptable.uid = PLAYER.UID
+	temptable.objectType = "Player"						-- other type is "Pod"
+	physicsEntity.fixture:setUserData(temptable)		-- links the physics object to the ECS entity
+    table.insert(PHYSICS_ENTITIES, physicsEntity)
+
+	print("Ship mass is " .. physicsEntity.body:getMass())
+	print("Ship size is " .. shipsize)
+
+end
+
 function physics.establishPhysicsWorld()
 	love.physics.setMeter(1)
 	PHYSICSWORLD = love.physics.newWorld(0,0,false)
@@ -95,7 +179,8 @@ function physics.establishPhysicsWorld()
 
 	establishWorldBorders()
     establishStarbase()
-	-- establishPlayerVessel()
+    fun.establishPlayerECS()
+    establishPlayerPhysics()
 end
 
 function physics.createAsteroid()
@@ -167,11 +252,24 @@ function physics.createAsteroid()
     table.insert(PHYSICS_ENTITIES, asteroid)
 end
 
+function physics.getPhysEntity(uid)
+    -- gets a phyisics item from an ECS UID
+    -- can then access body, fixture, shape etc.
+    assert(uid ~= nil)
+    for i = 1, #PHYSICS_ENTITIES do
+		local udtable = PHYSICS_ENTITIES[i].fixture:getUserData()
+		if udtable.uid == uid then
+            return PHYSICS_ENTITIES[i]
+        end
+    end
+    return nil
+end
+
 function physics.getPhysEntityXY(uid)
     -- returns a body x/y from an ECS UID
     assert(uid ~= nil)
 
-    local physEntity = fun.getPhysEntity(uid)
+    local physEntity = physics.getPhysEntity(uid)
     if physEntity ~= nil then
         -- return physEntity.body:getX(), physEntity.body:getY()
 		return physEntity.body:getPosition()
