@@ -7,7 +7,7 @@ function constants.load()
 
     FIELD_WIDTH = 1500	-- metres
     FIELD_HEIGHT = 2000	-- metres
-    FIELD_SAFEZONE = 100	-- this is 1oo metres height on/near the spacedock
+    FIELD_SAFEZONE = 150	-- this is metres above the bottom spacedock
 
     GAME_STAGE = 1
 

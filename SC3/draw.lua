@@ -46,11 +46,6 @@ local function drawStartBase()
 	love.graphics.setColor(1,1,1,1)
 	love.graphics.draw(image, drawx, drawy)
 
-
-
-
-
-
 	-- print bottom words
 	local txt = "STAGE " .. GAME_STAGE
 	local txtwidth = FONT[enum.fontHeavyMetalLarge]:getWidth(txt)
@@ -75,13 +70,53 @@ local function drawStartBase()
 
 end
 
+local function drawAsteroids()
+
+	for k, obj in pairs(PHYSICS_ENTITIES) do
+		local udtable = obj.fixture:getUserData()
+		if udtable.objectType == "Asteroid" and udtable.isVisible then
+			local body = obj.body
+			local mass = cf.round(body:getMass())
+			local x0, y0 = body:getPosition()
+			for _, fixture in pairs(body:getFixtures()) do
+				local shape = fixture:getShape()
+				local points = {body:getWorldPoints(shape:getPoints())}
+				for i = 1, #points do
+					points[i] = points[i] * BOX2D_SCALE
+				end
+
+				if udtable.oreType == enum.oreTypeGold then
+					love.graphics.setColor(236/255,164/255,18/255,0.75)
+					love.graphics.polygon("fill", points)
+				elseif udtable.oreType == enum.oreTypeSilver then
+					love.graphics.setColor(192/255,192/255,192/255,1)
+					love.graphics.polygon("fill", points)
+				elseif udtable.oreType == enum.oreTypeBronze then
+					love.graphics.setColor(122/255,84/255,9/255,0.5)
+					love.graphics.polygon("fill", points)
+				else
+					love.graphics.setColor(139/255,139/255,139/255,1)
+					love.graphics.polygon("line", points)
+				end
+				-- -- print the mass for debug reasons
+				-- love.graphics.setColor(1,1,1,1)
+				-- love.graphics.print(cf.round(obj.currentMass), (x0 * BOX2D_SCALE) + 15, (y0 * BOX2D_SCALE) - 15)
+			end
+
+		end
+	end
+end
+
 function draw.asteroids()
 	cam:attach()
 
-	cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
+	-- cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
 
-	-- draw the starting starbase
+	-- draw the starting and ending starbase
 	drawStartBase()
+	drawAsteroids()
+
+
 
 
 	cam:detach()
