@@ -132,6 +132,15 @@ function love.draw()
 		draw.mainMenu()
     elseif currentscreen == enum.sceneAsteroids then
 		draw.asteroids()		-- this includes hud and starbase etc
+
+		-- debug
+		-- draw ship mass and size
+		local entity = fun.getEntity(PLAYER.UID)
+		local physicsEntity = physics.getPhysEntity(PLAYER.UID)
+		love.graphics.setColor(1,1,1,1)
+		love.graphics.setFont(FONT[enum.fontDefault])
+		love.graphics.print("Mass: " .. physicsEntity.body:getMass(), 30, SCREEN_HEIGHT - 100)
+		love.graphics.print("Size: " .. fun.getEntitySize(entity), 30, SCREEN_HEIGHT - 80)
     end
     lovelyToasts.draw()
     res.stop()

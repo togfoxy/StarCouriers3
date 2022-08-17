@@ -109,15 +109,11 @@ end
 
 function draw.asteroids()
 	cam:attach()
-
 	-- cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
 
-	-- draw the starting and ending starbase
+	ECSWORLD:emit("draw")		-- draws all entities
 	drawStartBase()
 	drawAsteroids()
-
-
-
 
 	cam:detach()
 end
