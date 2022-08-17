@@ -28,10 +28,12 @@ end
 
 local function drawStartBase()
 	-- draw the starbase you start at
+	-- draw the starbase you stop at
 
+	-- draw image for bottom starbase
 	local image = IMAGES[enum.imagesStarbase]
 	local imagewidth = image:getWidth()
-	local drawx = (FIELD_WIDTH / 2) -- imagewidth / 2
+	local drawx = (FIELD_WIDTH / 2)
 	local drawy = (FIELD_HEIGHT) - 125
 
 	drawx = drawx * BOX2D_SCALE - imagewidth / 2
@@ -39,8 +41,17 @@ local function drawStartBase()
 	love.graphics.setColor(1,1,1,0.25)
 	love.graphics.draw(image, drawx, drawy)
 
-	-- print words
+	-- draw image for top starbase
+	local drawy = 85 * BOX2D_SCALE - (image:getHeight() / 2)
+	love.graphics.setColor(1,1,1,1)
+	love.graphics.draw(image, drawx, drawy)
 
+
+
+
+
+
+	-- print bottom words
 	local txt = "STAGE " .. GAME_STAGE
 	local txtwidth = FONT[enum.fontHeavyMetalLarge]:getWidth(txt)
 	local txtScaling = 7		-- make font larger
@@ -49,6 +60,16 @@ local function drawStartBase()
 	local drawy = (FIELD_HEIGHT - 50) * BOX2D_SCALE
 	love.graphics.setFont(FONT[enum.fontHeavyMetalLarge])
     love.graphics.setColor(1,1,1,0.25)
+	love.graphics.printf(txt, drawx, drawy, 1000, "left", 0, txtScaling, txtScaling)
+
+	-- print top words
+	txt = "STAGE " .. GAME_STAGE + 1
+	txtwidth = FONT[enum.fontHeavyMetalLarge]:getWidth(txt)
+	drawx = (FIELD_WIDTH / 2) * BOX2D_SCALE
+	drawx = drawx - (txtwidth / 2 * txtScaling)
+	local drawy = 25 * BOX2D_SCALE
+	love.graphics.setFont(FONT[enum.fontHeavyMetalLarge])
+	love.graphics.setColor(1,1,1,0.25)
 	love.graphics.printf(txt, drawx, drawy, 1000, "left", 0, txtScaling, txtScaling)
 
 

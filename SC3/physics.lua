@@ -130,7 +130,7 @@ end
 local function establishStarbase()
     -- add starbase
     local starbase = {}
-    starbase.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, 35, "static")
+    starbase.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, 75, "static")
     -- physicsEntity.body:setLinearDamping(0)
     starbase.body:setMass(5000)
 
