@@ -27,6 +27,8 @@ function constants.load()
 	RECEIPT = {}
     PLAYER = {}
     BUBBLE = {}
+    IMAGES = {}
+    FONT = {}
 
     enum = {}               -- global
     enum.sceneMainMenu = 1
@@ -35,8 +37,11 @@ function constants.load()
     enum.sceneDead = 4
 
     enum.fontDefault = 1
+    enum.fontHeavyMetalLarge = 2
 
     enum.buttonNewGame = 1
+
+    enum.imagesStarbase = 1
 
 
 end

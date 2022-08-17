@@ -39,9 +39,15 @@ end
 
 function functions.loadImages()
 
+    IMAGES[enum.imagesStarbase] = love.graphics.newImage("assets/images/starbase.png")
+
+
+
 end
 
 function functions.loadFonts()
+    FONT[enum.fontDefault] = love.graphics.newFont("assets/fonts/Vera.ttf", 12)
+    FONT[enum.fontHeavyMetalLarge] = love.graphics.newFont("assets/fonts/Heavy Metal Box.ttf")
 
 end
 

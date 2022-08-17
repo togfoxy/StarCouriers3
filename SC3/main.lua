@@ -131,7 +131,7 @@ function love.draw()
 	if currentscreen == enum.sceneMainMenu then
 		draw.mainMenu()
     elseif currentscreen == enum.sceneAsteroids then
-		draw.asteroids()
+		draw.asteroids()		-- this includes hud and starbase etc
     end
     lovelyToasts.draw()
     res.stop()
