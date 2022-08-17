@@ -82,7 +82,7 @@ end
 local function establishWorldBorders()
 	-- bottom border
 	local PHYSICSBORDER1 = {}
-    PHYSICSBORDER1.body = love.physics.newBody(PHYSICSWORLD, 0 + (FIELD_WIDTH / 2), FIELD_HEIGHT, "static") -- x, y.  The shape comes next
+    PHYSICSBORDER1.body = love.physics.newBody(PHYSICSWORLD, (FIELD_WIDTH / 2), FIELD_HEIGHT, "static") -- x, y.  The shape comes next
     PHYSICSBORDER1.shape = love.physics.newRectangleShape(FIELD_WIDTH, 5) --make a rectangle with a width and a height
     PHYSICSBORDER1.fixture = love.physics.newFixture(PHYSICSBORDER1.body, PHYSICSBORDER1.shape) --attach shape to body
 	PHYSICSBORDER1.fixture:setRestitution( 1 )
@@ -130,7 +130,7 @@ end
 local function establishStarbase()
     -- add starbase
     local starbase = {}
-    starbase.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, (FIELD_HEIGHT) - 35, "static")
+    starbase.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, 75, "static")
     -- physicsEntity.body:setLinearDamping(0)
     starbase.body:setMass(5000)
 
@@ -154,7 +154,7 @@ local function establishPlayerPhysics()
 	-- shipsize = DEBUG_VESSEL_SIZE
 
 	local physicsEntity = {}
-    physicsEntity.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, (FIELD_HEIGHT) - 75, "dynamic")
+    physicsEntity.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, (FIELD_HEIGHT) - 175, "dynamic")
 	physicsEntity.body:setLinearDamping(0)
 	physicsEntity.shape = love.physics.newRectangleShape(shipsize, shipsize)		-- will draw a rectangle around the body x/y. No need to offset it
 	physicsEntity.fixture = love.physics.newFixture(physicsEntity.body, physicsEntity.shape, PHYSICS_DENSITY)		-- the 1 is the density
