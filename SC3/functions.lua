@@ -7,21 +7,7 @@ function functions.establishPlayerECS()
     :give("uid")
 
     :give("chassis")
-    -- :give("engine")
-    -- :give("fuelTank")
-    -- :give("battery")
-    -- :give("oxyGenerator")
-    -- :give("cargoHold")
-
-    -- :give("leftThruster")
-    -- :give("rightThruster")
-    -- :give("reverseThruster")
-    -- :give("oxyTank")
-    -- :give("solarPanel")
-    -- :give("spaceSuit")
-    -- :give("SOSBeacon")
-    -- :give("Stabiliser")
-    -- :give("ejectionPod")
+    :give("engine")
 
     table.insert(ECS_ENTITIES, entity)
     PLAYER.UID = entity.uid.value 		-- store this for easy recall
@@ -31,6 +17,32 @@ function functions.establishPlayerECS()
     -- entity.chassis.currentHP = 0
     -- entity.battery.capacity = 10
 
+end
+
+function functions.loadDeck()
+    -- load up the deck of cards with all permissible actions
+    -- add the "dummy" card at the end to flag deck construction is complete
+    -- assumes the deck is already empty
+    -- the deck is a single entity with a lot of components
+    assert(ECS_DECK ~= {})
+
+    -- add player
+    local thisdeck = concord.entity(ECSWORLD)
+    :give("drawable")
+    :give("uid")
+    :give("dummy")      -- this is to signal deck construction is complete
+
+    -- scan the player vessel and add cards for each component
+    local entity = fun.getEntity(PLAYER.UID)
+    local allComponents = entity:getComponents()
+    for _, component in pairs(allComponents) do
+    			print(component.label)
+        if component.label == "Main engine" then
+            -- add the engine cards to the deck
+            thisdeck:give("fullThrust")
+        end
+    end
+    table.insert(ECS_DECK, thisdeck)
 end
 
 function functions.loadAudio()
@@ -48,7 +60,7 @@ end
 function functions.loadFonts()
     FONT[enum.fontDefault] = love.graphics.newFont("assets/fonts/Vera.ttf", 12)
     FONT[enum.fontHeavyMetalLarge] = love.graphics.newFont("assets/fonts/Heavy Metal Box.ttf")
-
+    FONT[enum.fontTech18] = love.graphics.newFont("assets/fonts/CorporateGothicNbpRegular-YJJ2.ttf", 24)
 end
 
 function functions.killECSEntity(entity)
@@ -77,6 +89,7 @@ function functions.InitialiseGame()
 	end
 
 	ECS_ENTITIES = {}
+    ECS_DECK = {}       -- deck of cards
 	PHYSICS_ENTITIES = {}
 	SHOPWORLD = {}
 	ECSWORLD = {}

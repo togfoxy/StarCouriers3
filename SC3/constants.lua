@@ -11,6 +11,10 @@ function constants.load()
 
     GAME_STAGE = 1
 
+    CARD_WIDTH = 100
+    CARD_HEIGHT = 150
+
+
     BOX2D_SCALE = 5
     TRANSLATEX = 1
     TRANSLATEY = 1
@@ -29,6 +33,7 @@ function constants.load()
     BUBBLE = {}
     IMAGES = {}
     FONT = {}
+    ECS_DECK = {}       -- deck of cards
 
     enum = {}               -- global
     enum.sceneMainMenu = 1
@@ -38,11 +43,16 @@ function constants.load()
 
     enum.fontDefault = 1
     enum.fontHeavyMetalLarge = 2
+    enum.fontTech18 = 3
 
     enum.buttonNewGame = 1
 
     enum.imagesStarbase = 1
 
+    enum.gamemodePlanning = 1
+    enum.gamemodeAction = 2
+
+    GAME_MODE = enum.gamemodePlanning
 
 end
 return constants

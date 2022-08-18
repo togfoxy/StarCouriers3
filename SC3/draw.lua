@@ -107,6 +107,37 @@ local function drawAsteroids()
 	end
 end
 
+local function drawCards()
+	-- assumes the deck is already populated
+
+	assert(#ECS_DECK > 0)
+
+	local drawx = 100
+	local drawy = SCREEN_HEIGHT - 200
+	love.graphics.setFont(FONT[enum.fontTech18])
+	love.graphics.setColor(1,1,1,1)
+
+	for k,v in pairs(ECS_DECK) do
+		local allComponents = v:getComponents()
+		for _, component in pairs(allComponents) do
+			local txt = component.label
+			if txt ~= "" and txt ~= nil then		-- things like 'drawable' don't have a label
+				love.graphics.print(txt, drawx + 5, drawy + 5)
+				component.x = drawx
+				component.y = drawy
+
+				if component.selected then
+					love.graphics.setColor(0,1,0,0.33)
+				else
+					love.graphics.setColor(1,1,1,0.33)
+				end
+				love.graphics.rectangle("fill", drawx, drawy, CARD_WIDTH, CARD_HEIGHT)
+				drawx = drawx + CARD_WIDTH + 20
+			end
+		end
+	end
+end
+
 function draw.asteroids()
 	cam:attach()
 	-- cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
@@ -116,6 +147,12 @@ function draw.asteroids()
 	drawAsteroids()
 
 	cam:detach()
+
+	if GAME_MODE == enum.gamemodePlanning then
+		drawCards()
+	end
+
+
 end
 
 return draw
