@@ -46,6 +46,7 @@ function constants.load()
     enum.fontTech18 = 3
 
     enum.buttonNewGame = 1
+    enum.buttonEndTurn = 2
 
     enum.imagesStarbase = 1
 
