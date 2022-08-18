@@ -45,10 +45,10 @@ end
 
 function love.mousereleased( x, y, button, istouch, presses )
 
+	local rx, ry = res.toGame(x,y)		-- does this need to be applied consistently across all mouse clicks?
 	if button == 1 then
 		local currentScreen = cf.currentScreenName(SCREEN_STACK)
 		if currentScreen == enum.sceneMainMenu then
-			local rx, ry = res.toGame(x,y)		-- does this need to be applied consistently across all mouse clicks?
 			for k, button in pairs(GUI_BUTTONS) do
 				if button.scene == enum.sceneMainMenu and button.visible then
 					-- get the id of the button that was clicked
@@ -66,6 +66,23 @@ function love.mousereleased( x, y, button, istouch, presses )
 					-- 	break
 					-- elseif mybuttonID == enum.buttonCredits then
 					-- 	cf.AddScreen(enum.sceneCredits, SCREEN_STACK)
+					end
+				end
+			end
+		elseif currentScreen == enum.sceneAsteroids then
+			if GAME_MODE == enum.gamemodePlanning then
+				-- see if a card is clicked
+				for k,v in pairs(ECS_DECK) do
+					local allComponents = v:getComponents()
+					for _, component in pairs(allComponents) do
+						if component.label ~= nil then
+							local cardx = component.x + (CARD_WIDTH / 2)
+							local cardy = component.y + (CARD_HEIGHT / 2)
+							local mousedist = cf.GetDistance(rx,ry, cardx, cardy)
+							if mousedist <= (CARD_WIDTH / 2) then
+								component.selected = not component.selected
+							end
+						end
 					end
 				end
 			end
@@ -155,15 +172,9 @@ function love.update(dt)
         ECSWORLD:emit("update", dt)
         PHYSICSWORLD:update(dt) --this puts the world into motion
 
-
-
-
-
-
-
-
-
-
+		if GAME_MODE == enum.gamemodePlanning and #ECS_DECK == 0 then
+			fun.loadDeck()
+		end
 
 		-- input:update()     -- baton key maps
 

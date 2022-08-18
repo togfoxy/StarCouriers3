@@ -1,29 +1,35 @@
 draw = {}
 
+local function drawGUIButtons(activeScene)
+	-- activeScene is an enum eg enum.sceneMainMenu
+
+for k, button in pairs(GUI_BUTTONS) do
+	if button.scene == activeScene and button.visible then
+		-- draw the button
+		love.graphics.setColor(button.bgcolour)
+		if button.state == "on" then
+			love.graphics.rectangle("fill", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
+			love.graphics.setColor(button.labeloncolour)
+		else
+			love.graphics.rectangle("line", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
+			love.graphics.setColor(button.labeloffcolour)
+		end
+		-- draw the label
+		-- love.graphics.setFont(FONT[enum.fontDefault])
+		-- label colour is set in the if statement above
+		love.graphics.setFont(FONT[enum.fontDefault])
+		love.graphics.printf(button.label, button.x + 5, button.y + 5, button.width, "center")
+	end
+end
+
+end
+
 function draw.mainMenu()
 
 	-- love.graphics.setColor(1,1,1,1)
 	-- love.graphics.draw(IMAGES[enum.imagesMenuBackground], 0,0)
 
-	for k, button in pairs(GUI_BUTTONS) do
-		if button.scene == enum.sceneMainMenu and button.visible then
-			-- draw the button
-			love.graphics.setColor(button.bgcolour)
-			if button.state == "on" then
-				love.graphics.rectangle("fill", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
-                love.graphics.setColor(button.labeloncolour)
-			else
-				love.graphics.rectangle("line", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
-                love.graphics.setColor(button.labeloffcolour)
-			end
-			-- draw the label
-			-- love.graphics.setFont(FONT[enum.fontDefault])
-            -- label colour is set in the if statement above
-			love.graphics.setFont(FONT[enum.fontDefault])
-			love.graphics.print(button.label, button.x + 5, button.y + 5)
-
-		end
-	end
+	drawGUIButtons(enum.sceneMainMenu)
 end
 
 local function drawStartBase()
@@ -66,8 +72,6 @@ local function drawStartBase()
 	love.graphics.setFont(FONT[enum.fontHeavyMetalLarge])
 	love.graphics.setColor(1,1,1,0.25)
 	love.graphics.printf(txt, drawx, drawy, 1000, "left", 0, txtScaling, txtScaling)
-
-
 end
 
 local function drawAsteroids()
@@ -107,6 +111,39 @@ local function drawAsteroids()
 	end
 end
 
+local function drawCards()
+	-- assumes the deck is already populated
+
+	assert(#ECS_DECK > 0)
+
+	local drawx = 100
+	local drawy = SCREEN_HEIGHT - 200
+	love.graphics.setFont(FONT[enum.fontTech18])
+	love.graphics.setColor(1,1,1,1)
+
+	for k,v in pairs(ECS_DECK) do
+		local allComponents = v:getComponents()
+		for _, component in pairs(allComponents) do
+			local txt = component.label
+			if txt ~= "" and txt ~= nil then		-- things like 'drawable' don't have a label
+				love.graphics.printf(txt, drawx + 5, drawy + 5, CARD_WIDTH, "center")
+				component.x = drawx
+				component.y = drawy
+
+				if component.selected then
+					love.graphics.setColor(0,1,0,0.33)
+				else
+					love.graphics.setColor(1,1,1,0.33)
+				end
+				love.graphics.rectangle("fill", drawx, drawy, CARD_WIDTH, CARD_HEIGHT)
+				drawx = drawx + CARD_WIDTH + 20
+			end
+		end
+	end
+
+	drawGUIButtons(enum.sceneAsteroids)
+end
+
 function draw.asteroids()
 	cam:attach()
 	-- cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
@@ -116,6 +153,12 @@ function draw.asteroids()
 	drawAsteroids()
 
 	cam:detach()
+
+	if GAME_MODE == enum.gamemodePlanning then
+		drawCards()		-- includes the end button
+	end
+
+
 end
 
 return draw

@@ -20,6 +20,25 @@ function buttons.load()
 	mybutton.scene = enum.sceneMainMenu
 	mybutton.identifier = enum.buttonNewGame
 	table.insert(GUI_BUTTONS, mybutton)
+
+	-- asteroids
+	local mybutton = {}
+	mybutton.x = SCREEN_WIDTH - 150
+	mybutton.y = SCREEN_HEIGHT - 150
+	mybutton.width = 100
+	mybutton.height = 40
+	mybutton.drawOutline = true
+	mybutton.label = "End turn"
+	mybutton.image = nil
+	mybutton.labeloffcolour = {1,1,1,1}
+	mybutton.labeloncolour = {1,1,1,1}
+	mybutton.bgcolour = {1,1,1,1}
+	-- mybutton.state = "on"
+	mybutton.visible = true
+	mybutton.scene = enum.sceneAsteroids
+	mybutton.identifier = enum.buttonEndTurn
+	table.insert(GUI_BUTTONS, mybutton)
+
 end
 
 function buttons.draw(scene)
