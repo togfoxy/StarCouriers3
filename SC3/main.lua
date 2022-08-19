@@ -45,33 +45,27 @@ end
 
 function love.mousereleased( x, y, button, istouch, presses )
 
+	local mybuttonID
 	local rx, ry = res.toGame(x,y)		-- does this need to be applied consistently across all mouse clicks?
+	local currentScreen = cf.currentScreenName(SCREEN_STACK)
+	for k, button in pairs(GUI_BUTTONS) do
+		if button.scene == currentScreen and button.visible then
+			-- get the id of the button that was clicked
+			mybuttonID = buttons.getButtonClicked(rx, ry, currentScreen, GUI_BUTTONS)		-- bounding box stuff
+			break
+		end
+	end
+
 	if button == 1 then
-		local currentScreen = cf.currentScreenName(SCREEN_STACK)
 		if currentScreen == enum.sceneMainMenu then
-			for k, button in pairs(GUI_BUTTONS) do
-				if button.scene == enum.sceneMainMenu and button.visible then
-					-- get the id of the button that was clicked
-					local mybuttonID = buttons.getButtonClicked(rx, ry, currentScreen, GUI_BUTTONS)		-- bounding box stuff
-					if mybuttonID == enum.buttonNewGame then
-						fun.InitialiseGame()
-						cf.AddScreen(enum.sceneAsteroids, SCREEN_STACK)
-						break
-					-- elseif mybuttonID == enum.buttonSaveGame then
-					-- 	fileops.saveGame()
-					-- 	break
-					-- elseif mybuttonID == enum.buttonLoadGame then
-					-- 	fileops.loadGame()
-					-- 	cf.AddScreen(enum.sceneAsteroid, SCREEN_STACK)
-					-- 	break
-					-- elseif mybuttonID == enum.buttonCredits then
-					-- 	cf.AddScreen(enum.sceneCredits, SCREEN_STACK)
-					end
-				end
+			if mybuttonID == enum.buttonNewGame then
+				fun.InitialiseGame()
+				cf.AddScreen(enum.sceneAsteroids, SCREEN_STACK)
+
 			end
 		elseif currentScreen == enum.sceneAsteroids then
 			if GAME_MODE == enum.gamemodePlanning then
-				-- see if a card is clicked
+				-- turn cards green if clicked
 				for k,v in pairs(ECS_DECK) do
 					local allComponents = v:getComponents()
 					for _, component in pairs(allComponents) do
@@ -84,6 +78,13 @@ function love.mousereleased( x, y, button, istouch, presses )
 							end
 						end
 					end
+				end
+
+				-- end turn if button is clicked
+				if mybuttonID == enum.buttonEndTurn then
+					GAME_MODE = enum.gamemodeAction
+					buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
+					GAME_TIMER = GAME_TIMER_DEFAULT
 				end
 			end
 		end
@@ -167,13 +168,26 @@ function love.update(dt)
 
     local currentscreen = cf.currentScreenName(SCREEN_STACK)
     if currentscreen == enum.sceneMainMenu then
-
+		--
     elseif currentscreen == enum.sceneAsteroids then
-        ECSWORLD:emit("update", dt)
-        PHYSICSWORLD:update(dt) --this puts the world into motion
-
 		if GAME_MODE == enum.gamemodePlanning and #ECS_DECK == 0 then
 			fun.loadDeck()
+		end
+
+		if GAME_MODE == enum.gamemodePlanning then
+			--
+		elseif GAME_MODE == enum.gamemodeAction then
+			GAME_TIMER = GAME_TIMER - dt
+			ECSWORLD:emit("update", dt)
+			PHYSICSWORLD:update(dt) --this puts the world into motion
+
+			if GAME_TIMER <= 0 then
+				GAME_MODE = enum.gamemodePlanning
+				buttons.makeButtonVisible(enum.buttonEndTurn, GUI_BUTTONS)
+
+			end
+		else
+			error()
 		end
 
 		-- input:update()     -- baton key maps

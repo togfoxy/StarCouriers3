@@ -10,6 +10,8 @@ function constants.load()
     FIELD_SAFEZONE = 150	-- this is metres above the bottom spacedock
 
     GAME_STAGE = 1
+    GAME_TIMER_DEFAULT = 5
+    GAME_TIMER = GAME_TIMER_DEFAULT      -- loop for this many seconds
 
     CARD_WIDTH = 100
     CARD_HEIGHT = 150
