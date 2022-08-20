@@ -36,6 +36,7 @@ local function initialiseDeckComponents()
         c.x = 0     -- used for drawing and positioning and detecting mouse clicks
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
+        c.thrust = 1.00          -- 100% = full thrust
     end)
 
 end
