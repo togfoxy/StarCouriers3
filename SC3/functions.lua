@@ -39,6 +39,8 @@ function functions.loadDeck()
         if component.label == "Main engine" then
             -- add the engine cards to the deck
             thisdeck:give("fullThrust")
+            thisdeck:give("halfThrust")
+            thisdeck:give("quarterThrust")
         end
     end
     table.insert(ECS_DECK, thisdeck)

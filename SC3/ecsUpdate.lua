@@ -21,8 +21,6 @@ local function applyForce(physEntity, vectordistance, dt)
     local facing = physEntity.body:getAngle()       -- radians. 0 = "right"
     facing = cf.convRadToCompass(facing)
 
-    print(vectordistance)
-
     local x2, y2 = cf.AddVectorToPoint(x1, y1, facing, vectordistance)
     local xvector = (x2 - x1) * 20 * dt
     local yvector = (y2 - y1) * 20 * dt
@@ -36,10 +34,11 @@ function ecsUpdate.init()
     })
     function systemEngine:update(dt)
         for _, entity in ipairs(self.pool) do
+            local requestedthrust
             if entity.uid.value == PLAYER.UID then
                 -- this is the player so treat it differently
                 -- get the requested thrust from CARDS
-                local requestedthrust = getRequestedThrust(entity, vectordistance)
+                requestedthrust = getRequestedThrust(entity, vectordistance)
             else
 
             end
@@ -47,10 +46,9 @@ function ecsUpdate.init()
             if entity.engine.currentHP > 0 then
                 -- thrust
                 local physEntity = physics.getPhysEntity(PLAYER.UID)
-                local vectordistance = entity.engine.strength      -- amount of force
+                local vectordistance = entity.engine.strength * requestedthrust     -- amount of force
                 applyForce(physEntity, vectordistance, dt)
             end
-
         end
     end
     ECSWORLD:addSystems(systemEngine)

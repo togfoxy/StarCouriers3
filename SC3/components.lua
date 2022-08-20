@@ -38,7 +38,20 @@ local function initialiseDeckComponents()
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 1.00          -- 100% = full thrust
     end)
-
+    concord.component("halfThrust", function(c)
+        c.label = "Half forward thrust"
+        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+        c.y = 0
+        c.selected = false      -- true if clicked and ready to play
+        c.thrust = 0.50          -- 100% = full thrust
+    end)
+    concord.component("quarterThrust", function(c)
+        c.label = "Quarter forward thrust"
+        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+        c.y = 0
+        c.selected = false      -- true if clicked and ready to play
+        c.thrust = 0.25          -- 100% = full thrust
+    end)
 end
 
 function comp.init()
