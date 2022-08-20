@@ -81,4 +81,22 @@ function buttons.getButtonClicked(mx, my, scene, buttontable)
     return nil
 end
 
+function buttons.makeButtonInvisible(mybuttonid, buttontable)
+	for k, button in pairs(GUI_BUTTONS) do
+		if button.identifier == mybuttonid then
+			button.visible = false
+			break
+		end
+	end
+end
+
+function buttons.makeButtonVisible(mybuttonid, GUI_BUTTONS)
+	for k, button in pairs(GUI_BUTTONS) do
+		if button.identifier == mybuttonid then
+			button.visible = true
+			break
+		end
+	end
+end
+
 return buttons

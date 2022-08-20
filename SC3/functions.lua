@@ -36,13 +36,15 @@ function functions.loadDeck()
     local entity = fun.getEntity(PLAYER.UID)
     local allComponents = entity:getComponents()
     for _, component in pairs(allComponents) do
-    			print(component.label)
         if component.label == "Main engine" then
             -- add the engine cards to the deck
             thisdeck:give("fullThrust")
+            thisdeck:give("halfThrust")
+            thisdeck:give("quarterThrust")
         end
     end
     table.insert(ECS_DECK, thisdeck)
+    print("Deck prepared.")
 end
 
 function functions.loadAudio()

@@ -118,14 +118,15 @@ local function drawCards()
 
 	local drawx = 100
 	local drawy = SCREEN_HEIGHT - 200
-	love.graphics.setFont(FONT[enum.fontTech18])
-	love.graphics.setColor(1,1,1,1)
+
 
 	for k,v in pairs(ECS_DECK) do
 		local allComponents = v:getComponents()
 		for _, component in pairs(allComponents) do
 			local txt = component.label
 			if txt ~= "" and txt ~= nil then		-- things like 'drawable' don't have a label
+				love.graphics.setFont(FONT[enum.fontTech18])
+				love.graphics.setColor(1,1,1,1)
 				love.graphics.printf(txt, drawx + 5, drawy + 5, CARD_WIDTH, "center")
 				component.x = drawx
 				component.y = drawy
