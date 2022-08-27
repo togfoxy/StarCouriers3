@@ -13,7 +13,25 @@ local function getRequestedThrust()
             end
         end
     end
+    if thrust > 1 then thrust = 1 end
+    if thrust < -1 then thrust = -1 end
     return thrust
+end
+
+local function getRequestedTurn()
+    -- returns a number from -1 to 1 meaning full left or full right or in between. 0 means no turn
+    local rotation = 0
+    local allComponents = ECS_DECK[1]:getComponents()
+    for _, component in pairs(allComponents) do
+        if component.selected then
+            if component.rotation ~= nil then
+                rotation = rotation + component.rotation
+            end
+        end
+    end
+    if rotation > 1 then rotation = 1 end
+    if rotation < -1 then rotation = -1 end
+    return rotation
 end
 
 local function applyForce(physEntity, vectordistance, dt)
@@ -34,11 +52,13 @@ function ecsUpdate.init()
     })
     function systemEngine:update(dt)
         for _, entity in ipairs(self.pool) do
-            local requestedthrust
+            local requestedthrust = 0
+            local requestedturn = 0
             if entity.uid.value == PLAYER.UID then
                 -- this is the player so treat it differently
                 -- get the requested thrust from CARDS
-                requestedthrust = getRequestedThrust(entity, vectordistance)
+                requestedthrust = getRequestedThrust()
+                requestedturn = getRequestedTurn()
             else
 
             end
@@ -48,6 +68,10 @@ function ecsUpdate.init()
                 local physEntity = physics.getPhysEntity(PLAYER.UID)
                 local vectordistance = entity.engine.strength * requestedthrust     -- amount of force
                 applyForce(physEntity, vectordistance, dt)
+
+                -- apply rotation
+                -- requestedturn is a number from -1 to 1
+                physEntity.body:applyTorque(entity.sideThrusters.rotation * requestedturn)
             end
         end
     end

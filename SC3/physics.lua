@@ -278,6 +278,14 @@ function physics.getPhysEntityXY(uid)
     end
 end
 
+function physics.cancelAngularVelocity(uid)
+	local physEntity = physics.getPhysEntity(uid)
+    if physEntity ~= nil then
+		physEntity.body:setAngularVelocity(0)
+	end
+end
+
+
 
 
 return physics

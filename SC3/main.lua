@@ -184,6 +184,8 @@ function love.update(dt)
 			if GAME_TIMER <= 0 then
 				GAME_MODE = enum.gamemodePlanning
 				buttons.makeButtonVisible(enum.buttonEndTurn, GUI_BUTTONS)
+				physics.cancelAngularVelocity(PLAYER.UID)		-- applies to player only
+
 
 			end
 		else
