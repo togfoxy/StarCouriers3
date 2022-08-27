@@ -8,6 +8,7 @@ function functions.establishPlayerECS()
 
     :give("chassis")
     :give("engine")
+    :give("sideThrusters")
 
     table.insert(ECS_ENTITIES, entity)
     PLAYER.UID = entity.uid.value 		-- store this for easy recall
@@ -41,6 +42,10 @@ function functions.loadDeck()
             thisdeck:give("fullThrust")
             thisdeck:give("halfThrust")
             thisdeck:give("quarterThrust")
+            thisdeck:give("fullPortTurn")
+            thisdeck:give("halfPortTurn")
+            thisdeck:give("quarterPortTurn")
+            -- thisdeck:give("fullPortTurn")
         end
     end
     table.insert(ECS_DECK, thisdeck)
@@ -144,6 +149,7 @@ function functions.getEntitySize(entity)
    end
    return totalsize
 end
+
 
 
 
