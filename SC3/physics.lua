@@ -350,8 +350,8 @@ function physics.processCollision(userdatatable1, userdatatable2)
 		cf.AddScreen(enum.sceneShop, SCREEN_STACK)
 	else
 		-- collision with asteroids and players
-		physicsEntity1 = fun.getPhysEntity(uid1)
-		physicsEntity2 = fun.getPhysEntity(uid2)
+		physicsEntity1 = physics.getPhysEntity(uid1)
+		physicsEntity2 = physics.getPhysEntity(uid2)
 		assert(physicsEntity1 ~= nil)
 		assert(physicsEntity2 ~= nil)
 
