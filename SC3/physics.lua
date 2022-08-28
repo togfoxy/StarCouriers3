@@ -306,6 +306,12 @@ function physics.processCollision(userdatatable1, userdatatable2)
 		GAME_TIMER = 0
 		GAME_MODE = enum.gamemodePlanning
 
+
+
+
+
+
+
 		-- -- get credit for items in hold
 		-- if entity:has("cargoHold") then
 		-- 	if entity.cargoHold.currentHP > 0 then

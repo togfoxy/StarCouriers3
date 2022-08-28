@@ -154,7 +154,7 @@ end
 
 function draw.asteroids()
 	cam:attach()
-	-- cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
+	cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
 
 	ECSWORLD:emit("draw")		-- draws all entities
 	drawStartBase()

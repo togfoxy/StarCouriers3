@@ -71,6 +71,20 @@ function love.keyreleased( key, scancode )
 
 			GAME_STAGE = GAME_STAGE + 1
 
+			--! move this asteroid destroy/create into a new function
+			-- need to delete all physics objects where temptable.objectType = "Asteroid"
+			for i = #PHYSICS_ENTITIES, 1, -1 do
+				local udtable = PHYSICS_ENTITIES[i].fixture:getUserData()
+				if udtable.objectType == "Asteroid" then
+		            PHYSICS_ENTITIES[i].body:destroy()
+		            table.remove(PHYSICS_ENTITIES, i)
+		        end
+		    end
+			-- need to create asteroids
+			NUMBER_OF_ASTEROIDS = GAME_STAGE        -- not even sure why there is a global here
+			for i = 1, NUMBER_OF_ASTEROIDS do
+				physics.createAsteroid()
+			end
 		end
 		cf.RemoveScreen(SCREEN_STACK)
     end
@@ -95,7 +109,6 @@ function love.mousereleased( x, y, button, istouch, presses )
 			if mybuttonID == enum.buttonNewGame then
 				fun.InitialiseGame()
 				cf.AddScreen(enum.sceneAsteroids, SCREEN_STACK)
-
 			end
 		elseif currentScreen == enum.sceneAsteroids then
 			if GAME_MODE == enum.gamemodePlanning then
