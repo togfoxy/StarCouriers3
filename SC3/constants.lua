@@ -9,6 +9,9 @@ function constants.load()
     FIELD_HEIGHT = 2000	-- metres
     FIELD_SAFEZONE = 150	-- this is metres above the bottom spacedock
 
+    PLAYER_START_X = FIELD_WIDTH / 2
+    PLAYER_START_Y = (FIELD_HEIGHT) - 175
+
     GAME_STAGE = 1
     GAME_TIMER_DEFAULT = 5
     GAME_TIMER = GAME_TIMER_DEFAULT      -- loop for this many seconds

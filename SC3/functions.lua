@@ -67,9 +67,6 @@ function functions.loadImages()
     IMAGES[enum.quadsArrows] = love.graphics.newImage("assets/images/arrows2.png")
     QUAD_ARROWS = cf.fromImageToQuads(IMAGES[enum.quadsArrows], 72, 104)
 
-
-
-
 end
 
 function functions.loadFonts()
@@ -116,6 +113,7 @@ function functions.InitialiseGame()
     ecsUpdate.init()
 
 	physics.establishPhysicsWorld()		-- creates borders, starbase and player vessel and player physics
+    NUMBER_OF_ASTEROIDS = GAME_STAGE        -- not even sure why there is a global here
 	for i = 1, NUMBER_OF_ASTEROIDS do
 		physics.createAsteroid()
 	end
