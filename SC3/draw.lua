@@ -3,24 +3,24 @@ draw = {}
 local function drawGUIButtons(activeScene)
 	-- activeScene is an enum eg enum.sceneMainMenu
 
-for k, button in pairs(GUI_BUTTONS) do
-	if button.scene == activeScene and button.visible then
-		-- draw the button
-		love.graphics.setColor(button.bgcolour)
-		if button.state == "on" then
-			love.graphics.rectangle("fill", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
-			love.graphics.setColor(button.labeloncolour)
-		else
-			love.graphics.rectangle("line", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
-			love.graphics.setColor(button.labeloffcolour)
+	for k, button in pairs(GUI_BUTTONS) do
+		if button.scene == activeScene and button.visible then
+			-- draw the button
+			love.graphics.setColor(button.bgcolour)
+			if button.state == "on" then
+				love.graphics.rectangle("fill", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
+				love.graphics.setColor(button.labeloncolour)
+			else
+				love.graphics.rectangle("line", button.x, button.y, button.width, button.height)			-- drawx/y is the top left corner of the square
+				love.graphics.setColor(button.labeloffcolour)
+			end
+			-- draw the label
+			-- love.graphics.setFont(FONT[enum.fontDefault])
+			-- label colour is set in the if statement above
+			love.graphics.setFont(FONT[enum.fontDefault])
+			love.graphics.printf(button.label, button.x + 5, button.y + 5, button.width, "center")
 		end
-		-- draw the label
-		-- love.graphics.setFont(FONT[enum.fontDefault])
-		-- label colour is set in the if statement above
-		love.graphics.setFont(FONT[enum.fontDefault])
-		love.graphics.printf(button.label, button.x + 5, button.y + 5, button.width, "center")
 	end
-end
 
 end
 
@@ -44,7 +44,7 @@ local function drawStartBase()
 
 	drawx = drawx * BOX2D_SCALE - imagewidth / 2
 	drawy = drawy * BOX2D_SCALE
-	love.graphics.setColor(1,1,1,0.25)
+	love.graphics.setColor(1,1,1,1)
 	love.graphics.draw(image, drawx, drawy)
 
 	-- draw image for top starbase
@@ -60,7 +60,7 @@ local function drawStartBase()
 	drawx = drawx - (txtwidth / 2 * txtScaling)
 	local drawy = (FIELD_HEIGHT - 50) * BOX2D_SCALE
 	love.graphics.setFont(FONT[enum.fontHeavyMetalLarge])
-    love.graphics.setColor(1,1,1,0.25)
+    love.graphics.setColor(1,1,1,1)
 	love.graphics.printf(txt, drawx, drawy, 1000, "left", 0, txtScaling, txtScaling)
 
 	-- print top words
@@ -70,7 +70,7 @@ local function drawStartBase()
 	drawx = drawx - (txtwidth / 2 * txtScaling)
 	local drawy = 25 * BOX2D_SCALE
 	love.graphics.setFont(FONT[enum.fontHeavyMetalLarge])
-	love.graphics.setColor(1,1,1,0.25)
+	love.graphics.setColor(1,1,1,1)
 	love.graphics.printf(txt, drawx, drawy, 1000, "left", 0, txtScaling, txtScaling)
 end
 
@@ -131,6 +131,11 @@ local function drawCards()
 				component.x = drawx
 				component.y = drawy
 
+				-- draw the arrow/image/quad
+				if component.quadnumber ~= nil then
+					love.graphics.draw(IMAGES[enum.quadsArrows], QUAD_ARROWS[component.quadnumber], drawx, drawy, 0, 1, 1, -10, -35)
+				end
+
 				if component.selected then
 					love.graphics.setColor(0,1,0,0.33)
 				else
@@ -138,6 +143,8 @@ local function drawCards()
 				end
 				love.graphics.rectangle("fill", drawx, drawy, CARD_WIDTH, CARD_HEIGHT)
 				drawx = drawx + CARD_WIDTH + 20
+
+
 			end
 		end
 	end

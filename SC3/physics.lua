@@ -154,7 +154,7 @@ local function establishPlayerPhysics()
 	-- shipsize = DEBUG_VESSEL_SIZE
 
 	local physicsEntity = {}
-    physicsEntity.body = love.physics.newBody(PHYSICSWORLD, FIELD_WIDTH / 2, (FIELD_HEIGHT) - 175, "dynamic")
+    physicsEntity.body = love.physics.newBody(PHYSICSWORLD, PLAYER_START_X, PLAYER_START_Y, "dynamic")
 	physicsEntity.body:setLinearDamping(0)
 	physicsEntity.shape = love.physics.newRectangleShape(shipsize, shipsize)		-- will draw a rectangle around the body x/y. No need to offset it
 	physicsEntity.fixture = love.physics.newFixture(physicsEntity.body, physicsEntity.shape, PHYSICS_DENSITY)		-- the 1 is the density
@@ -285,6 +285,112 @@ function physics.cancelAngularVelocity(uid)
 	end
 end
 
+function physics.processCollision(userdatatable1, userdatatable2)
+
+	local uid1 = userdatatable1.uid
+	local uid2 = userdatatable2.uid
+
+	if userdatatable1.objectType == "Border" or userdatatable2.objectType == "Border" then
+		-- collision is with border. Do nothing.
+	elseif userdatatable1.objectType == "Starbase" or userdatatable2.objectType == "Starbase" then
+		-- go to shop
+		TRANSLATEX = SCREEN_WIDTH / 2
+		TRANSLATEY = SCREEN_HEIGHT / 2
+		ZOOMFACTOR = 1
+		local physEntity = physics.getPhysEntity(PLAYER.UID)
+		local entity = fun.getEntity(PLAYER.UID)
+		physEntity.body:setLinearVelocity( 0, 0)
+
+		physEntity.fixture:setSensor(false)
+
+		GAME_TIMER = 0
+		GAME_MODE = enum.gamemodePlanning
+
+
+
+
+
+
+
+		-- -- get credit for items in hold
+		-- if entity:has("cargoHold") then
+		-- 	if entity.cargoHold.currentHP > 0 then
+		-- 		local profit = cf.round(entity.cargoHold.currentAmount)
+		-- 		if PLAYER.WEALTH == nil then PLAYER.WEALTH = 0 end
+		-- 		PLAYER.WEALTH = PLAYER.WEALTH + profit
+		-- 		entity.cargoHold.currentAmount = 0
+		--
+		-- 		local item = {}
+		-- 		item.description = "Income"
+		-- 		item.amount = profit
+		-- 		table.insert(RECEIPT, item)
+		-- 	end
+		-- end
+
+		-- -- refill consumerables
+		-- local allComponents = entity:getComponents()
+		-- for _, component in pairs(allComponents) do
+		-- 	if component.capacity ~= nil then
+		-- 		component.capacity = component.maxCapacity
+		-- 	end
+		-- end
+		-- if entity:has("spaceSuit") then entity.spaceSuit.O2capacity = entity.spaceSuit.maxO2Capacity end
+		-- if entity:has("SOSBeacon") then entity.SOSBeacon.activated = false end
+
+		-- AUDIO[enum.audioBGSkismo]:stop()
+
+		-- local temptable = physEntity.fixture:getUserData()
+		-- if temptable.objectType == "Pod" then
+		-- 	temptable.objectType = "Player"
+		-- end
+
+		-- -- re-activate alarm sounds
+		-- ALARM_OFF_TIMER = 0
+
+		cf.AddScreen(enum.sceneShop, SCREEN_STACK)
+	else
+		-- collision with asteroids and players
+		physicsEntity1 = physics.getPhysEntity(uid1)
+		physicsEntity2 = physics.getPhysEntity(uid2)
+		assert(physicsEntity1 ~= nil)
+		assert(physicsEntity2 ~= nil)
+
+		local mass1 = physicsEntity1.body:getMass( )
+		local mass2 = physicsEntity2.body:getMass( )
+		local totalmass = mass1 + mass2
+		local rndnum = love.math.random(1, totalmass)
+		if rndnum <= mass1 then
+			-- damage object1
+			if userdatatable1.objectType == "Player" or userdatatable1.objectType == "Pod" then
+				local entity = fun.getEntity(uid1)
+				local component = fun.getRandomComponent(entity)
+				component.currentHP = component.currentHP - normalimpulse
+				if component.currentHP <= 0 then
+					component.currentHP = 0
+				end
+				local rndscrape = love.math.random(1,2)
+				if rndscrape == 1 then
+					SOUND.scrape1 = true
+				else
+					SOUND.scrape2 = true
+				end
+			end
+		else
+			-- damage object2
+			if userdatatable2.objectType == "Player" or userdatatable2.objectType == "Pod" then
+				local entity = fun.getEntity(uid2)
+				local component = fun.getRandomComponent(entity)
+				component.currentHP = component.currentHP - normalimpulse
+				if component.currentHP <= 0 then
+					component.currentHP = 0
+				end
+			end
+		end
+	end
+
+
+
+end
 
 
 

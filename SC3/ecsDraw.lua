@@ -25,13 +25,19 @@ function ecsDraw.init()
             if physEntity ~= nil then
                 drawPolygon(physEntity.body)
 
-
-            -- for each component
-            -- get the x/y of the component
-            -- get the size of the component
-            -- get the corners of the component
-            -- draw the component
-
+                -- draw the 'front' if player vessel
+                if entity.uid.value == PLAYER.UID then
+                    local facingrad = physEntity.body:getAngle()       -- radians
+                    local facingdeg = cf.convRadToCompass(facingrad)
+                    local x1,y1 = physEntity.body:getPosition()
+                    local x2,y2 = cf.AddVectorToPoint(x1, y1, facingdeg, 15)
+                    x1 = x1 * BOX2D_SCALE
+                    y1 = y1 * BOX2D_SCALE
+                    x2 = x2 * BOX2D_SCALE
+                    y2 = y2 * BOX2D_SCALE
+                    love.graphics.setColor(1,1,1,1)
+                    love.graphics.line(x1,y1,x2,y2)
+                end
             end
         end
 

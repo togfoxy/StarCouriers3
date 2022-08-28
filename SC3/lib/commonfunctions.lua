@@ -168,6 +168,8 @@ end
 function fromImageToQuads(spritesheet, spritewidth, spriteheight)
 	-- Where spritesheet is an image and spritewidth is the width
 	-- and height of your textures
+	-- returns a 1d table/array (sequence) that reads left to right across the image and then down
+	-- i.e. row 1 then row 2 etc
 	local quadtiles = {} -- A table containing the quads to return
 	local imageWidth = spritesheet:getWidth()
 	local imageHeight = spritesheet:getHeight()

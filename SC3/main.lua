@@ -37,10 +37,58 @@ ecsUpdate = require 'ecsUpdate'
 buttons = require 'buttons'
 physics = require 'physics'
 
+function postSolve(a, b, coll, normalimpulse, tangentimpulse)
+	-- a is the first fixture
+	-- b is the second fixture
+
+	local udtable1 = a:getUserData()
+	local udtable2 = b:getUserData()
+
+	physics.processCollision(udtable1, udtable2)
+
+
+
+
+end
+
 function love.keyreleased( key, scancode )
+	local currentscreen = cf.currentScreenName(SCREEN_STACK)
 	if key == "escape" then
+		if currentscreen == enum.sceneShop then
+			-- prep for next round
+			local physEntity = physics.getPhysEntity(PLAYER.UID)
+			physEntity.body:setPosition(PLAYER_START_X, PLAYER_START_Y)
+
+			-- ensure there is no rotation
+			physEntity.body:setAngularVelocity(0)
+			physEntity.body:setAngle( 4.71 )		-- north or 'up'
+
+			local x1, y1 = physEntity.body:getPosition()
+
+			TRANSLATEX = (x1 * BOX2D_SCALE)
+			TRANSLATEY = (y1 * BOX2D_SCALE)
+			ZOOMFACTOR = 0.4
+
+			GAME_STAGE = GAME_STAGE + 1
+
+			--! move this asteroid destroy/create into a new function
+			-- need to delete all physics objects where temptable.objectType = "Asteroid"
+			for i = #PHYSICS_ENTITIES, 1, -1 do
+				local udtable = PHYSICS_ENTITIES[i].fixture:getUserData()
+				if udtable.objectType == "Asteroid" then
+		            PHYSICS_ENTITIES[i].body:destroy()
+		            table.remove(PHYSICS_ENTITIES, i)
+		        end
+		    end
+			-- need to create asteroids
+			NUMBER_OF_ASTEROIDS = GAME_STAGE        -- not even sure why there is a global here
+			for i = 1, NUMBER_OF_ASTEROIDS do
+				physics.createAsteroid()
+			end
+		end
 		cf.RemoveScreen(SCREEN_STACK)
     end
+
 end
 
 function love.mousereleased( x, y, button, istouch, presses )
@@ -61,7 +109,6 @@ function love.mousereleased( x, y, button, istouch, presses )
 			if mybuttonID == enum.buttonNewGame then
 				fun.InitialiseGame()
 				cf.AddScreen(enum.sceneAsteroids, SCREEN_STACK)
-
 			end
 		elseif currentScreen == enum.sceneAsteroids then
 			if GAME_MODE == enum.gamemodePlanning then
