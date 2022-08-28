@@ -27,7 +27,7 @@ local function initialiseShipComponents()
 
     concord.component("sideThrusters", function(c)
 		c.label = "Side thrusters"
-        c.size = love.math.random(1,3)
+        c.size = love.math.random(1,3) + love.math.random(1,3)      -- left + right thrusters so do size twice
         c.rotation = PHYSICS_TURNRATE + love.math.random(1,6) * 500      -- rotation strength (angular)
 		c.maxHP = love.math.random(1,3) * 1000
 		c.currentHP = c.maxHP
@@ -50,6 +50,8 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 1.00          -- 100% = full thrust
+        c.quadnumber = 2           -- which quad to draw
+
     end)
     concord.component("halfThrust", function(c)
         c.label = "Half forward thrust"
@@ -57,6 +59,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 0.50          -- 100% = full thrust
+        c.quadnumber = 6           -- which quad to draw
     end)
     concord.component("quarterThrust", function(c)
         c.label = "Quarter forward thrust"
@@ -64,6 +67,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 0.25          -- 100% = full thrust
+        c.quadnumber = 10           -- which quad to draw
     end)
     concord.component("fullPortTurn", function(c)
         c.label = "Full turn to port"
@@ -71,6 +75,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.rotation = -1          -- this is negative so turns counter clockwise
+        c.quadnumber = 1           -- which quad to draw
     end)
     concord.component("halfPortTurn", function(c)
         c.label = "Half turn to port"
@@ -78,6 +83,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.rotation = -0.5          -- this is negative so turns counter clockwise
+        c.quadnumber = 5           -- which quad to draw
     end)
     concord.component("quarterPortTurn", function(c)
         c.label = "Quarter turn to port"
@@ -85,6 +91,33 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.rotation = -0.25          -- this is negative so turns counter clockwise
+        c.quadnumber = 9           -- which quad to draw
+
+    end)
+    concord.component("fullStarboardTurn", function(c)
+        c.label = "Full turn to starboard"
+        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+        c.y = 0
+        c.selected = false      -- true if clicked and ready to play
+        c.rotation = 1          -- this is negative so turns counter clockwise
+        c.quadnumber = 3           -- which quad to draw
+    end)
+
+    concord.component("halfStarboardTurn", function(c)
+        c.label = "Half turn to starboard"
+        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+        c.y = 0
+        c.selected = false      -- true if clicked and ready to play
+        c.rotation = 0.5          -- this is negative so turns counter clockwise
+        c.quadnumber = 7           -- which quad to draw
+    end)
+    concord.component("quarterStarboardTurn", function(c)
+        c.label = "Quarter turn to starboard"
+        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+        c.y = 0
+        c.selected = false      -- true if clicked and ready to play
+        c.rotation = 0.25          -- this is negative so turns counter clockwise
+        c.quadnumber = 11           -- which quad to draw
     end)
 end
 

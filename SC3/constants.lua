@@ -37,6 +37,7 @@ function constants.load()
     IMAGES = {}
     FONT = {}
     ECS_DECK = {}       -- deck of cards
+    QUAD_ARROWS = {}        -- for the cards
 
     enum = {}               -- global
     enum.sceneMainMenu = 1
@@ -51,7 +52,10 @@ function constants.load()
     enum.buttonNewGame = 1
     enum.buttonEndTurn = 2
 
+    -- images and quads use the same sequence so must have unique numbers
     enum.imagesStarbase = 1
+    enum.imagesQuarterPort = 2
+    enum.quadsArrows = 3
 
     enum.gamemodePlanning = 1
     enum.gamemodeAction = 2

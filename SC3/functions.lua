@@ -10,6 +10,7 @@ function functions.establishPlayerECS()
     :give("engine")
     :give("sideThrusters")
 
+
     table.insert(ECS_ENTITIES, entity)
     PLAYER.UID = entity.uid.value 		-- store this for easy recall
 
@@ -45,7 +46,9 @@ function functions.loadDeck()
             thisdeck:give("fullPortTurn")
             thisdeck:give("halfPortTurn")
             thisdeck:give("quarterPortTurn")
-            -- thisdeck:give("fullPortTurn")
+            thisdeck:give("fullStarboardTurn")
+            thisdeck:give("halfStarboardTurn")
+            thisdeck:give("quarterStarboardTurn")
         end
     end
     table.insert(ECS_DECK, thisdeck)
@@ -59,6 +62,11 @@ end
 function functions.loadImages()
 
     IMAGES[enum.imagesStarbase] = love.graphics.newImage("assets/images/starbase.png")
+
+    -- quads
+    IMAGES[enum.quadsArrows] = love.graphics.newImage("assets/images/arrows2.png")
+    QUAD_ARROWS = cf.fromImageToQuads(IMAGES[enum.quadsArrows], 72, 104)
+
 
 
 
