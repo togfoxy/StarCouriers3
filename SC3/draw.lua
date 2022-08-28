@@ -111,14 +111,13 @@ local function drawAsteroids()
 	end
 end
 
-local function drawCards()
+function draw.drawCards()
 	-- assumes the deck is already populated
 
 	assert(#ECS_DECK > 0)
 
 	local drawx = 100
 	local drawy = SCREEN_HEIGHT - 200
-
 
 	for k,v in pairs(ECS_DECK) do
 		local allComponents = v:getComponents()
@@ -143,8 +142,6 @@ local function drawCards()
 				end
 				love.graphics.rectangle("fill", drawx, drawy, CARD_WIDTH, CARD_HEIGHT)
 				drawx = drawx + CARD_WIDTH + 20
-
-
 			end
 		end
 	end
@@ -153,20 +150,28 @@ local function drawCards()
 end
 
 function draw.asteroids()
-	cam:attach()
+
 	-- cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
 
 	ECSWORLD:emit("draw")		-- draws all entities
 	drawStartBase()
 	drawAsteroids()
+end
 
-	cam:detach()
+function draw.HUD()
+	local drawx = SCREEN_WIDTH - 150
+	local drawy = 50
 
-	if GAME_MODE == enum.gamemodePlanning then
-		drawCards()		-- includes the end button
+	-- draw the ship components
+	local entity = fun.getEntity(PLAYER.UID)
+	local allComponents = entity:getComponents()
+	for _, component in pairs(allComponents) do
+		if component.currentHP ~= nil then
+			local txt = component.label .. " : " .. cf.round(component.currentHP)
+			love.graphics.print(txt, drawx, drawy)
+			drawy = drawy + 25
+		end
 	end
-
-
 end
 
 return draw

@@ -156,7 +156,27 @@ function functions.getEntitySize(entity)
    return totalsize
 end
 
+function functions.getRandomComponent(entity)
+	-- get a random component from entity
+	-- probability of getting a 'hit' depends on the size of each component
 
+	local entitysize = cf.round(fun.getEntitySize(entity))
+	local rndnum = love.math.random(1, entitysize)
+
+	local allComponents = entity:getComponents()
+	for ComponentClass, Component in pairs(allComponents) do
+		if Component.size ~= nil then
+			if Component.size > 0 then
+				if Component.size >= rndnum	then
+					return Component
+				else
+					rndnum = rndnum - Component.size
+				end
+			end
+		end
+   end
+   error("Program flow should not have reached here")
+end
 
 
 return functions

@@ -285,7 +285,7 @@ function physics.cancelAngularVelocity(uid)
 	end
 end
 
-function physics.processCollision(userdatatable1, userdatatable2)
+function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 
 	local uid1 = userdatatable1.uid
 	local uid2 = userdatatable2.uid
@@ -305,12 +305,6 @@ function physics.processCollision(userdatatable1, userdatatable2)
 
 		GAME_TIMER = 0
 		GAME_MODE = enum.gamemodePlanning
-
-
-
-
-
-
 
 		-- -- get credit for items in hold
 		-- if entity:has("cargoHold") then
@@ -349,6 +343,7 @@ function physics.processCollision(userdatatable1, userdatatable2)
 
 		cf.AddScreen(enum.sceneShop, SCREEN_STACK)
 	else
+		--! make this a function
 		-- collision with asteroids and players
 		physicsEntity1 = physics.getPhysEntity(uid1)
 		physicsEntity2 = physics.getPhysEntity(uid2)
@@ -364,7 +359,10 @@ function physics.processCollision(userdatatable1, userdatatable2)
 			if userdatatable1.objectType == "Player" or userdatatable1.objectType == "Pod" then
 				local entity = fun.getEntity(uid1)
 				local component = fun.getRandomComponent(entity)
-				component.currentHP = component.currentHP - normalimpulse
+	print(component.currentHP, impactspeed)
+							component.currentHP = component.currentHP - impactspeed
+	print(component.currentHP)
+				print(component.label .. " is damaged.")
 				if component.currentHP <= 0 then
 					component.currentHP = 0
 				end
@@ -380,9 +378,18 @@ function physics.processCollision(userdatatable1, userdatatable2)
 			if userdatatable2.objectType == "Player" or userdatatable2.objectType == "Pod" then
 				local entity = fun.getEntity(uid2)
 				local component = fun.getRandomComponent(entity)
-				component.currentHP = component.currentHP - normalimpulse
+	print(component.currentHP, impactspeed)
+				component.currentHP = component.currentHP - impactspeed
+	print(component.currentHP)
+				print(component.label .. " is damaged.")
 				if component.currentHP <= 0 then
 					component.currentHP = 0
+				end
+				local rndscrape = love.math.random(1,2)
+				if rndscrape == 1 then
+					SOUND.scrape1 = true
+				else
+					SOUND.scrape2 = true
 				end
 			end
 		end

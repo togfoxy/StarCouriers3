@@ -28,7 +28,7 @@ local function initialiseShipComponents()
     concord.component("sideThrusters", function(c)
 		c.label = "Side thrusters"
         c.size = love.math.random(1,3) + love.math.random(1,3)      -- left + right thrusters so do size twice
-        c.rotation = PHYSICS_TURNRATE + love.math.random(1,6) * 500      -- rotation strength (angular)
+        c.rotation = PHYSICS_TURNRATE + love.math.random(1,6) * 50      -- rotation strength (angular)
 		c.maxHP = love.math.random(1,3) * 1000
 		c.currentHP = c.maxHP
         c.purchasePrice = 2000
