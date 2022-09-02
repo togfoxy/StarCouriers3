@@ -76,6 +76,14 @@ local function initialiseDeckComponents()
         c.thrust = -1.00          -- 100% = full thrust
         c.quadnumber = 4           -- which quad to draw
     end)
+    concord.component("halfReverse", function(c)
+        c.label = "Half reverse"
+        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+        c.y = 0
+        c.selected = false      -- true if clicked and ready to play
+        c.thrust = -0.500          -- 100% = full thrust
+        c.quadnumber = 0           -- which quad to draw
+    end)
 
     concord.component("turnToNorth", function(c)
         c.label = "Turn to north"

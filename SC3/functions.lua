@@ -183,5 +183,22 @@ function functions.getRandomComponent(entity)
    error("Program flow should not have reached here")
 end
 
+function functions.getDesiredHeading()
+    -- returns the compass heading of the first card it finds
+    -- multiple cards are ignored
+    -- returns nil if no cards are selected
+
+    local result = nil
+    local allComponents = ECS_DECK[1]:getComponents()
+    for _, card in pairs(allComponents) do
+        if card.selected then
+            if card.targetheading ~= nil then
+                return card.targetheading
+            end
+        end
+    end
+end
+
+
 
 return functions

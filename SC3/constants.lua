@@ -27,6 +27,9 @@ function constants.load()
     TRANSLATEY = 1
     ZOOMFACTOR = 1
 
+    integral = 0
+    previous_error = 0      --! make this a propoer global
+
     NUMBER_OF_ASTEROIDS = GAME_STAGE
 
     SCREEN_STACK = {}

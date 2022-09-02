@@ -19,7 +19,6 @@ local function getTurnDirection(currentheading, desiredheading)
     else
         result = "none"     -- no turning required
     end
-    print("result = " .. result)
     return result
 end
 
@@ -40,21 +39,6 @@ local function getRequestedThrust()
     if thrust < -1 then thrust = -1 end
     return thrust
 end
-
-local function getTargetHeading()
-    -- returns the compass heading of the first card it finds
-    -- multiple cards are ignored
-
-    local allComponents = ECS_DECK[1]:getComponents()
-    for _, card in pairs(allComponents) do
-        if card.selected then
-            if card.targetheading ~= nil then
-                return card.targetheading
-            end
-        end
-    end
-end
-
 
 local function applyForce(physEntity, vectordistance, dt)
     local x1, y1 = physEntity.body:getPosition()
@@ -96,21 +80,62 @@ function ecsUpdate.init()
 
             if entity.sideThrusters.currentHP > 0 then
                 -- apply rotation if necessary
+
                 local currentheading = cf.convRadToCompass(physEntity.body:getAngle())
-                local targetheading = getTargetHeading()                    -- returns desired compass heading
+                local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
+                if targetheading == nil then targetheading = currentheading end
+
+                local kp = 0.1
+                local ki = 0.1
+                local kd = 0.1
+                local error = targetheading - currentheading
+                integral = integral + (error * dt)
+                derivative = (error - previous_error) / dt
+                local output = (kp * error) + (ki * integral) + (kd * derivative)
+                previous_error = error
+
+            print("PID output:" .. output)
 
                 local turndirection = getTurnDirection(currentheading, targetheading)
+                if output < 25 then turndirection = "left" end
+                if output > 25 then turndirection = "right" end
+                if output == 0 then turndirection = "none" end
 
-    print(turndirection)
+                -- if dt < GAME_TIMER_DEFAULT then
+                --     -- turn towards desired heading
+                -- else
+                --     -- start the counter turn
+                --     if turndirection == "left" then
+                --         turndirection = "right"
+                --     elseif turndirection == "right" then
+                --         turndirection = "left"
+                --     else
+                --     end
+                -- end
+
+                local turnpower = math.abs(targetheading - currentheading)
+                turnpower = turnpower / 90        -- arbitrary number
+                if turnpower > 1 then turnpower = 1 end
+
+                turnpower = 1
 
                 if turndirection == "left" then
-                    physEntity.body:applyTorque(entity.sideThrusters.rotation * -1)
+                    physEntity.body:applyTorque(entity.sideThrusters.rotation * turnpower * -1)
+                    -- print("Applying left hand turn", currentheading, targetheading, turnpower)
                 elseif turndirection == "right" then
-                    physEntity.body:applyTorque(entity.sideThrusters.rotation * 1)
-    print("Hi")
+                    physEntity.body:applyTorque(entity.sideThrusters.rotation * turnpower  * 1)
+                    -- print("Applying right hand turn", currentheading, targetheading, turnpower)
                 else
                     physEntity.body:setAngularVelocity(0)
                 end
+
+                -- error = setpoint - input
+                -- integral = integral + error * dt
+                -- derivative = (error - previous error) / dt
+                -- output = kp*error + ki*integral + kd*derivate
+                -- previous error = error
+
+
             end
         end
     end
