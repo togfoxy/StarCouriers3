@@ -24,17 +24,17 @@ local function initialiseShipComponents()
         c.x = -10
         c.y = 10
     end)
-
     concord.component("sideThrusters", function(c)
 		c.label = "Side thrusters"
         c.size = love.math.random(1,3) + love.math.random(1,3)      -- left + right thrusters so do size twice
-        c.rotation = PHYSICS_TURNRATE + love.math.random(1,6) * 500      -- rotation strength (angular)
+        c.rotation = PHYSICS_TURNRATE + love.math.random(1,6) * 50      -- rotation strength (angular)
 		c.maxHP = love.math.random(1,3) * 1000
 		c.currentHP = c.maxHP
         c.purchasePrice = 2000
-        c.description = "Turns yoru vessel. Size " .. c.size .. ". Health " .. c.maxHP .. ". Thrust " .. c.rotation .. "."
+        c.description = "Turns your vessel. Size " .. c.size .. ". Health " .. c.maxHP .. ". Thrust " .. c.rotation .. "."
         c.description = c.description .. "\nStronger thrusters enable faster turning."
     end)
+
 
 end
 
@@ -51,7 +51,6 @@ local function initialiseDeckComponents()
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 1.00          -- 100% = full thrust
         c.quadnumber = 2           -- which quad to draw
-
     end)
     concord.component("halfThrust", function(c)
         c.label = "Half forward thrust"
@@ -69,6 +68,15 @@ local function initialiseDeckComponents()
         c.thrust = 0.25          -- 100% = full thrust
         c.quadnumber = 10           -- which quad to draw
     end)
+    concord.component("fullReverse", function(c)
+        c.label = "Full reverse"
+        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+        c.y = 0
+        c.selected = false      -- true if clicked and ready to play
+        c.thrust = -1.00          -- 100% = full thrust
+        c.quadnumber = 4           -- which quad to draw
+    end)
+
     concord.component("fullPortTurn", function(c)
         c.label = "Full turn to port"
         c.x = 0     -- used for drawing and positioning and detecting mouse clicks

@@ -43,12 +43,7 @@ function postSolve(a, b, coll, normalimpulse, tangentimpulse)
 
 	local udtable1 = a:getUserData()
 	local udtable2 = b:getUserData()
-
-	physics.processCollision(udtable1, udtable2)
-
-
-
-
+	physics.processCollision(udtable1, udtable2, normalimpulse)
 end
 
 function love.keyreleased( key, scancode )
@@ -196,7 +191,16 @@ function love.draw()
 	if currentscreen == enum.sceneMainMenu then
 		draw.mainMenu()
     elseif currentscreen == enum.sceneAsteroids then
+
+		cam:attach()
 		draw.asteroids()		-- this includes hud and starbase etc
+
+		cam:detach()
+
+		if GAME_MODE == enum.gamemodePlanning then
+			draw.drawCards()		-- includes the end button
+			draw.HUD()
+		end
 
 		-- debug
 		-- draw ship mass and size

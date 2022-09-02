@@ -9,7 +9,7 @@ function functions.establishPlayerECS()
     :give("chassis")
     :give("engine")
     :give("sideThrusters")
-
+    :give("fullReverse")
 
     table.insert(ECS_ENTITIES, entity)
     PLAYER.UID = entity.uid.value 		-- store this for easy recall
@@ -43,6 +43,10 @@ function functions.loadDeck()
             thisdeck:give("fullThrust")
             thisdeck:give("halfThrust")
             thisdeck:give("quarterThrust")
+            thisdeck:give("fullReverse")
+
+        end
+        if component.label == "Side thrusters" then
             thisdeck:give("fullPortTurn")
             thisdeck:give("halfPortTurn")
             thisdeck:give("quarterPortTurn")
@@ -156,7 +160,27 @@ function functions.getEntitySize(entity)
    return totalsize
 end
 
+function functions.getRandomComponent(entity)
+	-- get a random component from entity
+	-- probability of getting a 'hit' depends on the size of each component
 
+	local entitysize = cf.round(fun.getEntitySize(entity))
+	local rndnum = love.math.random(1, entitysize)
+
+	local allComponents = entity:getComponents()
+	for ComponentClass, Component in pairs(allComponents) do
+		if Component.size ~= nil then
+			if Component.size > 0 then
+				if Component.size >= rndnum	then
+					return Component
+				else
+					rndnum = rndnum - Component.size
+				end
+			end
+		end
+   end
+   error("Program flow should not have reached here")
+end
 
 
 return functions
