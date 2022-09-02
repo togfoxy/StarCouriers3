@@ -1,5 +1,30 @@
 ecsUpdate = {}
 
+local function getTurnDirection(currentheading, desiredheading)
+    -- returns a string: "left" or "right"
+    local result
+    local angledelta = desiredheading - currentheading
+
+    -- determine if cheaper to turn left or right
+    local leftdistance = currentheading - desiredheading
+    if leftdistance < 0 then leftdistance = 360 + leftdistance end      -- this is '+' because leftdistance is a negative value
+
+    local rightdistance = desiredheading - currentheading
+    if rightdistance < 0 then rightdistance = 360 + rightdistance end   -- this is '+' because leftdistance is a negative value
+
+print(currentheading, desiredheading, leftdistance, rightdistance)
+
+    if leftdistance < rightdistance then
+        result = "left"
+    elseif rightdistance < leftdistance then
+        result = "right"
+    else
+        result = "none"     -- no turning required
+    end
+    print("result = " .. result)
+    return result
+end
+
 local function getRequestedThrust()
     -- loop through the green cards and sum the thrust asked for
     -- rememeber the deck is one entity with lots of components
@@ -18,21 +43,20 @@ local function getRequestedThrust()
     return thrust
 end
 
-local function getRequestedTurn()
-    -- returns a number from -1 to 1 meaning full left or full right or in between. 0 means no turn
-    local rotation = 0
+local function getTargetHeading()
+    -- returns the compass heading of the first card it finds
+    -- multiple cards are ignored
+
     local allComponents = ECS_DECK[1]:getComponents()
-    for _, component in pairs(allComponents) do
-        if component.selected then
-            if component.rotation ~= nil then
-                rotation = rotation + component.rotation
+    for _, card in pairs(allComponents) do
+        if card.selected then
+            if card.targetheading ~= nil then
+                return card.targetheading
             end
         end
     end
-    if rotation > 1 then rotation = 1 end
-    if rotation < -1 then rotation = -1 end
-    return rotation
 end
+
 
 local function applyForce(physEntity, vectordistance, dt)
     local x1, y1 = physEntity.body:getPosition()
@@ -52,26 +76,43 @@ function ecsUpdate.init()
     })
     function systemEngine:update(dt)
         for _, entity in ipairs(self.pool) do
+            local physEntity
             local requestedthrust = 0
             local requestedturn = 0
             if entity.uid.value == PLAYER.UID then
                 -- this is the player so treat it differently
                 -- get the requested thrust from CARDS
-                requestedthrust = getRequestedThrust()
-                requestedturn = getRequestedTurn()
-            else
+                requestedthrust = getRequestedThrust()      --! need to factor damaged reverse thrusters
+                -- requestedturn = getRequestedTurn()
 
+                physEntity = physics.getPhysEntity(PLAYER.UID)
+            else
             end
 
             if entity.engine.currentHP > 0 then
                 -- thrust
-                local physEntity = physics.getPhysEntity(PLAYER.UID)
+
                 local vectordistance = entity.engine.strength * requestedthrust     -- amount of force
                 applyForce(physEntity, vectordistance, dt)
+            end
 
-                -- apply rotation
-                -- requestedturn is a number from -1 to 1
-                physEntity.body:applyTorque(entity.sideThrusters.rotation * requestedturn)
+            if entity.sideThrusters.currentHP > 0 then
+                -- apply rotation if necessary
+                local currentheading = cf.convRadToCompass(physEntity.body:getAngle())
+                local targetheading = getTargetHeading()                    -- returns desired compass heading
+
+                local turndirection = getTurnDirection(currentheading, targetheading)
+
+    print(turndirection)
+
+                if turndirection == "left" then
+                    physEntity.body:applyTorque(entity.sideThrusters.rotation * -1)
+                elseif turndirection == "right" then
+                    physEntity.body:applyTorque(entity.sideThrusters.rotation * 1)
+    print("Hi")
+                else
+                    physEntity.body:setAngularVelocity(0)
+                end
             end
         end
     end

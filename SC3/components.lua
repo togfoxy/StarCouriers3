@@ -77,56 +77,75 @@ local function initialiseDeckComponents()
         c.quadnumber = 4           -- which quad to draw
     end)
 
-    concord.component("fullPortTurn", function(c)
-        c.label = "Full turn to port"
-        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-        c.y = 0
-        c.selected = false      -- true if clicked and ready to play
-        c.rotation = -1          -- this is negative so turns counter clockwise
-        c.quadnumber = 1           -- which quad to draw
+    concord.component("turnToNorth", function(c)
+        c.label = "Turn to north"
+        c.selected = false
+        c.targetheading = 0
+        c.quadnumber = nil           -- which quad to draw
     end)
-    concord.component("halfPortTurn", function(c)
-        c.label = "Half turn to port"
-        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-        c.y = 0
-        c.selected = false      -- true if clicked and ready to play
-        c.rotation = -0.5          -- this is negative so turns counter clockwise
-        c.quadnumber = 5           -- which quad to draw
-    end)
-    concord.component("quarterPortTurn", function(c)
-        c.label = "Quarter turn to port"
-        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-        c.y = 0
-        c.selected = false      -- true if clicked and ready to play
-        c.rotation = -0.25          -- this is negative so turns counter clockwise
-        c.quadnumber = 9           -- which quad to draw
-
-    end)
-    concord.component("fullStarboardTurn", function(c)
-        c.label = "Full turn to starboard"
-        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-        c.y = 0
-        c.selected = false      -- true if clicked and ready to play
-        c.rotation = 1          -- this is negative so turns counter clockwise
-        c.quadnumber = 3           -- which quad to draw
+    concord.component("turnToNorthEast", function(c)
+        c.label = "Turn to north east"
+        c.selected = false
+        c.targetheading = 45
+        c.quadnumber = nil           -- which quad to draw
     end)
 
-    concord.component("halfStarboardTurn", function(c)
-        c.label = "Half turn to starboard"
-        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-        c.y = 0
-        c.selected = false      -- true if clicked and ready to play
-        c.rotation = 0.5          -- this is negative so turns counter clockwise
-        c.quadnumber = 7           -- which quad to draw
-    end)
-    concord.component("quarterStarboardTurn", function(c)
-        c.label = "Quarter turn to starboard"
-        c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-        c.y = 0
-        c.selected = false      -- true if clicked and ready to play
-        c.rotation = 0.25          -- this is negative so turns counter clockwise
-        c.quadnumber = 11           -- which quad to draw
-    end)
+
+
+
+
+
+
+    -- concord.component("fullPortTurn", function(c)
+    --     c.label = "Full turn to port"
+    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+    --     c.y = 0
+    --     c.selected = false      -- true if clicked and ready to play
+    --     c.rotation = -1          -- this is negative so turns counter clockwise
+    --     c.quadnumber = 1           -- which quad to draw
+    -- end)
+    -- concord.component("halfPortTurn", function(c)
+    --     c.label = "Half turn to port"
+    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+    --     c.y = 0
+    --     c.selected = false      -- true if clicked and ready to play
+    --     c.rotation = -0.5          -- this is negative so turns counter clockwise
+    --     c.quadnumber = 5           -- which quad to draw
+    -- end)
+    -- concord.component("quarterPortTurn", function(c)
+    --     c.label = "Quarter turn to port"
+    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+    --     c.y = 0
+    --     c.selected = false      -- true if clicked and ready to play
+    --     c.rotation = -0.25          -- this is negative so turns counter clockwise
+    --     c.quadnumber = 9           -- which quad to draw
+    --
+    -- end)
+    -- concord.component("fullStarboardTurn", function(c)
+    --     c.label = "Full turn to starboard"
+    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+    --     c.y = 0
+    --     c.selected = false      -- true if clicked and ready to play
+    --     c.rotation = 1          -- this is negative so turns counter clockwise
+    --     c.quadnumber = 3           -- which quad to draw
+    -- end)
+    --
+    -- concord.component("halfStarboardTurn", function(c)
+    --     c.label = "Half turn to starboard"
+    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+    --     c.y = 0
+    --     c.selected = false      -- true if clicked and ready to play
+    --     c.rotation = 0.5          -- this is negative so turns counter clockwise
+    --     c.quadnumber = 7           -- which quad to draw
+    -- end)
+    -- concord.component("quarterStarboardTurn", function(c)
+    --     c.label = "Quarter turn to starboard"
+    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
+    --     c.y = 0
+    --     c.selected = false      -- true if clicked and ready to play
+    --     c.rotation = 0.25          -- this is negative so turns counter clockwise
+    --     c.quadnumber = 11           -- which quad to draw
+    -- end)
 end
 
 function comp.init()

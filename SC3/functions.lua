@@ -47,12 +47,18 @@ function functions.loadDeck()
 
         end
         if component.label == "Side thrusters" then
-            thisdeck:give("fullPortTurn")
-            thisdeck:give("halfPortTurn")
-            thisdeck:give("quarterPortTurn")
-            thisdeck:give("fullStarboardTurn")
-            thisdeck:give("halfStarboardTurn")
-            thisdeck:give("quarterStarboardTurn")
+            thisdeck:give("turnToNorth")
+            thisdeck:give("turnToNorthEast")
+
+
+
+
+            -- thisdeck:give("fullPortTurn")
+            -- thisdeck:give("halfPortTurn")
+            -- thisdeck:give("quarterPortTurn")
+            -- thisdeck:give("fullStarboardTurn")
+            -- thisdeck:give("halfStarboardTurn")
+            -- thisdeck:give("quarterStarboardTurn")
         end
     end
     table.insert(ECS_DECK, thisdeck)

@@ -19,6 +19,7 @@ function constants.load()
     CARD_WIDTH = 100
     CARD_HEIGHT = 150
 
+    PHYSICS_DENSITY = 1.15
     PHYSICS_TURNRATE = 0       -- how fast can objects turn
 
     BOX2D_SCALE = 5
