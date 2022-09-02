@@ -89,63 +89,43 @@ local function initialiseDeckComponents()
         c.targetheading = 45
         c.quadnumber = nil           -- which quad to draw
     end)
+    concord.component("turnToEast", function(c)
+        c.label = "Turn to east"
+        c.selected = false
+        c.targetheading = 90
+        c.quadnumber = nil           -- which quad to draw
+    end)
+    concord.component("turnToSouthEast", function(c)
+        c.label = "Turn to south east"
+        c.selected = false
+        c.targetheading = 135
+        c.quadnumber = nil           -- which quad to draw
+    end)
+    concord.component("turnToSouth", function(c)
+        c.label = "Turn to south"
+        c.selected = false
+        c.targetheading = 180
+        c.quadnumber = nil           -- which quad to draw
+    end)
+    concord.component("turnToSouthWest", function(c)
+        c.label = "Turn to south west"
+        c.selected = false
+        c.targetheading = 225
+        c.quadnumber = nil           -- which quad to draw
+    end)
+    concord.component("turnToWest", function(c)
+        c.label = "Turn to west"
+        c.selected = false
+        c.targetheading = 270
+        c.quadnumber = nil           -- which quad to draw
+    end)
+    concord.component("turnToNorthWest", function(c)
+        c.label = "Turn to north west"
+        c.selected = false
+        c.targetheading = 315
+        c.quadnumber = nil           -- which quad to draw
+    end)
 
-
-
-
-
-
-
-    -- concord.component("fullPortTurn", function(c)
-    --     c.label = "Full turn to port"
-    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-    --     c.y = 0
-    --     c.selected = false      -- true if clicked and ready to play
-    --     c.rotation = -1          -- this is negative so turns counter clockwise
-    --     c.quadnumber = 1           -- which quad to draw
-    -- end)
-    -- concord.component("halfPortTurn", function(c)
-    --     c.label = "Half turn to port"
-    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-    --     c.y = 0
-    --     c.selected = false      -- true if clicked and ready to play
-    --     c.rotation = -0.5          -- this is negative so turns counter clockwise
-    --     c.quadnumber = 5           -- which quad to draw
-    -- end)
-    -- concord.component("quarterPortTurn", function(c)
-    --     c.label = "Quarter turn to port"
-    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-    --     c.y = 0
-    --     c.selected = false      -- true if clicked and ready to play
-    --     c.rotation = -0.25          -- this is negative so turns counter clockwise
-    --     c.quadnumber = 9           -- which quad to draw
-    --
-    -- end)
-    -- concord.component("fullStarboardTurn", function(c)
-    --     c.label = "Full turn to starboard"
-    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-    --     c.y = 0
-    --     c.selected = false      -- true if clicked and ready to play
-    --     c.rotation = 1          -- this is negative so turns counter clockwise
-    --     c.quadnumber = 3           -- which quad to draw
-    -- end)
-    --
-    -- concord.component("halfStarboardTurn", function(c)
-    --     c.label = "Half turn to starboard"
-    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-    --     c.y = 0
-    --     c.selected = false      -- true if clicked and ready to play
-    --     c.rotation = 0.5          -- this is negative so turns counter clockwise
-    --     c.quadnumber = 7           -- which quad to draw
-    -- end)
-    -- concord.component("quarterStarboardTurn", function(c)
-    --     c.label = "Quarter turn to starboard"
-    --     c.x = 0     -- used for drawing and positioning and detecting mouse clicks
-    --     c.y = 0
-    --     c.selected = false      -- true if clicked and ready to play
-    --     c.rotation = 0.25          -- this is negative so turns counter clockwise
-    --     c.quadnumber = 11           -- which quad to draw
-    -- end)
 end
 
 function comp.init()
@@ -163,8 +143,6 @@ function comp.init()
 
     initialiseShipComponents()
     initialiseDeckComponents()          -- deck of cards
-
-
 
 end
 

@@ -12,8 +12,6 @@ local function getTurnDirection(currentheading, desiredheading)
     local rightdistance = desiredheading - currentheading
     if rightdistance < 0 then rightdistance = 360 + rightdistance end   -- this is '+' because leftdistance is a negative value
 
-print(currentheading, desiredheading, leftdistance, rightdistance)
-
     if leftdistance < rightdistance then
         result = "left"
     elseif rightdistance < leftdistance then
