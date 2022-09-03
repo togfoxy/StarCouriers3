@@ -85,40 +85,13 @@ function ecsUpdate.init()
                 local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
                 if targetheading == nil then targetheading = currentheading end
 
-                local kp = 0.1
-                local ki = 0.1
-                local kd = 0.1
-                local error = targetheading - currentheading
-                integral = integral + (error * dt)
-                derivative = (error - previous_error) / dt
-                local output = (kp * error) + (ki * integral) + (kd * derivative)
-                previous_error = error
-
-            print("PID output:" .. output)
-
                 local turndirection = getTurnDirection(currentheading, targetheading)
-                if output < 25 then turndirection = "left" end
-                if output > 25 then turndirection = "right" end
-                if output == 0 then turndirection = "none" end
 
-                -- if dt < GAME_TIMER_DEFAULT then
-                --     -- turn towards desired heading
-                -- else
-                --     -- start the counter turn
-                --     if turndirection == "left" then
-                --         turndirection = "right"
-                --     elseif turndirection == "right" then
-                --         turndirection = "left"
-                --     else
-                --     end
-                -- end
+                local headingerror = targetheading - currentheading
 
-                local turnpower = math.abs(targetheading - currentheading)
-                turnpower = turnpower / 90        -- arbitrary number
-                if turnpower > 1 then turnpower = 1 end
+                if math.abs(headingerror) < 1 then turndirection = "none" end
 
-                turnpower = 1
-
+                local turnpower = 1
                 if turndirection == "left" then
                     physEntity.body:applyTorque(entity.sideThrusters.rotation * turnpower * -1)
                     -- print("Applying left hand turn", currentheading, targetheading, turnpower)
@@ -128,14 +101,6 @@ function ecsUpdate.init()
                 else
                     physEntity.body:setAngularVelocity(0)
                 end
-
-                -- error = setpoint - input
-                -- integral = integral + error * dt
-                -- derivative = (error - previous error) / dt
-                -- output = kp*error + ki*integral + kd*derivate
-                -- previous error = error
-
-
             end
         end
     end

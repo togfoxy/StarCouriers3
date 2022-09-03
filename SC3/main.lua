@@ -56,7 +56,7 @@ function love.keyreleased( key, scancode )
 
 			-- ensure there is no rotation
 			physEntity.body:setAngularVelocity(0)
-			physEntity.body:setAngle( 4.71 )		-- north or 'up'
+			physEntity.body:setAngle( 0 )		-- north or 'up'
 
 			local x1, y1 = physEntity.body:getPosition()
 
@@ -132,12 +132,6 @@ function love.mousereleased( x, y, button, istouch, presses )
 					GAME_MODE = enum.gamemodeAction
 					buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
 					GAME_TIMER = GAME_TIMER_DEFAULT
-
-					-- local physEntity = physics.getPhysEntity(PLAYER.UID)
-					-- PLAYER.CURRENTHEADING = cf.convRadToCompass(physEntity.body:getAngle())
-					-- PLAYER.DESIREDHEADING = fun.getDesiredHeading()
-
-
 				end
 			end
 		end
