@@ -56,7 +56,7 @@ function love.keyreleased( key, scancode )
 
 			-- ensure there is no rotation
 			physEntity.body:setAngularVelocity(0)
-			physEntity.body:setAngle( 4.71 )		-- north or 'up'
+			physEntity.body:setAngle( 0 )		-- north or 'up'
 
 			local x1, y1 = physEntity.body:getPosition()
 
@@ -117,6 +117,11 @@ function love.mousereleased( x, y, button, istouch, presses )
 							local mousedist = cf.GetDistance(rx,ry, cardx, cardy)
 							if mousedist <= (CARD_WIDTH / 2) then
 								component.selected = not component.selected
+								-- if target direction has changed then reset PID
+								if component.rotation ~= nil then
+									integral = 0
+									previous_error = 0
+								end
 							end
 						end
 					end
@@ -206,9 +211,10 @@ function love.draw()
 		-- draw ship mass and size
 		local entity = fun.getEntity(PLAYER.UID)
 		local physicsEntity = physics.getPhysEntity(PLAYER.UID)
+		local shipmass = cf.round(physicsEntity.body:getMass())
 		love.graphics.setColor(1,1,1,1)
 		love.graphics.setFont(FONT[enum.fontDefault])
-		love.graphics.print("Mass: " .. physicsEntity.body:getMass(), 30, SCREEN_HEIGHT - 100)
+		love.graphics.print("Mass: " .. shipmass, 30, SCREEN_HEIGHT - 100)
 		love.graphics.print("Size: " .. fun.getEntitySize(entity), 30, SCREEN_HEIGHT - 80)
     end
     lovelyToasts.draw()
@@ -235,9 +241,9 @@ function love.update(dt)
 			if GAME_TIMER <= 0 then
 				GAME_MODE = enum.gamemodePlanning
 				buttons.makeButtonVisible(enum.buttonEndTurn, GUI_BUTTONS)
-				physics.cancelAngularVelocity(PLAYER.UID)		-- applies to player only
-
-
+				PLAYER.CURRENTHEADING = nil
+				PLAYER.DESIREDHEADING = nil
+				-- physics.cancelAngularVelocity(PLAYER.UID)		-- applies to player only
 			end
 		else
 			error()

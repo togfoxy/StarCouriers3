@@ -44,15 +44,16 @@ function functions.loadDeck()
             thisdeck:give("halfThrust")
             thisdeck:give("quarterThrust")
             thisdeck:give("fullReverse")
-
         end
         if component.label == "Side thrusters" then
-            thisdeck:give("fullPortTurn")
-            thisdeck:give("halfPortTurn")
-            thisdeck:give("quarterPortTurn")
-            thisdeck:give("fullStarboardTurn")
-            thisdeck:give("halfStarboardTurn")
-            thisdeck:give("quarterStarboardTurn")
+            thisdeck:give("turnToNorth")
+            thisdeck:give("turnToNorthEast")
+            thisdeck:give("turnToEast")
+            thisdeck:give("turnToSouthEast")
+            thisdeck:give("turnToSouth")
+            thisdeck:give("turnToSouthWest")
+            thisdeck:give("turnToWest")
+            thisdeck:give("turnToNorthWest")
         end
     end
     table.insert(ECS_DECK, thisdeck)
@@ -181,6 +182,23 @@ function functions.getRandomComponent(entity)
    end
    error("Program flow should not have reached here")
 end
+
+function functions.getDesiredHeading()
+    -- returns the compass heading of the first card it finds
+    -- multiple cards are ignored
+    -- returns nil if no cards are selected
+
+    local result = nil
+    local allComponents = ECS_DECK[1]:getComponents()
+    for _, card in pairs(allComponents) do
+        if card.selected then
+            if card.targetheading ~= nil then
+                return card.targetheading
+            end
+        end
+    end
+end
+
 
 
 return functions

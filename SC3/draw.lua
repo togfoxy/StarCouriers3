@@ -150,9 +150,7 @@ function draw.drawCards()
 end
 
 function draw.asteroids()
-
 	-- cf.printAllPhysicsObjects(PHYSICSWORLD, BOX2D_SCALE)
-
 	ECSWORLD:emit("draw")		-- draws all entities
 	drawStartBase()
 	drawAsteroids()

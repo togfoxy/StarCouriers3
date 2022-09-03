@@ -403,8 +403,11 @@ function isInFront(x, y, facing, x2, y2)
 end
 
 function convRadToCompass(rad)
-	-- converts radian = 0 to compass bearing
+	-- converts radian to compass bearing
 	local deg = math.deg (rad)
+
+	if deg < 0 then deg = 360 + deg end
+	if deg > 359 then deg = deg - 360 end
 	return deg
 	-- return cf.adjustHeading(deg, -90)
 end
