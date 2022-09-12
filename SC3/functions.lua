@@ -69,7 +69,7 @@ function functions.loadImages()
     IMAGES[enum.imagesStarbase] = love.graphics.newImage("assets/images/starbase.png")
 
     -- quads
-    IMAGES[enum.quadsArrows] = love.graphics.newImage("assets/images/arrows2.png")
+    IMAGES[enum.quadsArrows] = love.graphics.newImage("assets/images/arrows3.png")
     QUAD_ARROWS = cf.fromImageToQuads(IMAGES[enum.quadsArrows], 72, 104)
 
 end

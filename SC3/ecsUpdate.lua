@@ -80,26 +80,47 @@ function ecsUpdate.init()
 
             if entity.sideThrusters.currentHP > 0 then
                 -- apply rotation if necessary
-
                 local currentheading = cf.convRadToCompass(physEntity.body:getAngle())
-                local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
-                if targetheading == nil then targetheading = currentheading end
+                if PLAYER.STOP_HEADING ~= nil then
+                    if currentheading ~= PLAYER.STOP_HEADING then
 
-                local turndirection = getTurnDirection(currentheading, targetheading)
+                        local kp = 0.2
+                        local ki = 0.001
+                        local kd = 0.1
+                        local bias = 0
 
-                local headingerror = targetheading - currentheading
+                        setRps = PLAYER.STOP_HEADING
+                        getRps = currentheading
 
-                if math.abs(headingerror) < 1 then turndirection = "none" end
+                        value_out_prior = value_out or 0
+                        error = setRps - getRps
+                        integral = integral_prior+error
+                        derivative = error-error_prior
 
-                local turnpower = 1
-                if turndirection == "left" then
-                    physEntity.body:applyTorque(entity.sideThrusters.rotation * turnpower * -1)
-                    -- print("Applying left hand turn", currentheading, targetheading, turnpower)
-                elseif turndirection == "right" then
-                    physEntity.body:applyTorque(entity.sideThrusters.rotation * turnpower  * 1)
-                    -- print("Applying right hand turn", currentheading, targetheading, turnpower)
-                else
-                    physEntity.body:setAngularVelocity(0)
+                        value_out = kp*error+ki*integral+kd*derivative+bias
+
+                        error_prior = error
+                        integral_prior = integral
+
+                        if value_out > value_out_prior then
+                            physEntity.body:applyTorque(entity.sideThrusters.rotation * 1)
+                            print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning right")
+                        else
+                            physEntity.body:applyTorque(entity.sideThrusters.rotation * -1)
+                            print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
+                        end
+
+    -- print(setRps,getRps,error)
+
+                        if math.abs(error) <= 1 and math.abs(physEntity.body:getAngularVelocity()) <= 0.15 then
+                            physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
+                            physEntity.body:setAngularVelocity(0)
+                            PLAYER.STOP_HEADING = nil
+                            error_prior = 0
+                            integral_prior = 0
+                            value_out_prior = 0
+                        end
+                    end
                 end
             end
         end
