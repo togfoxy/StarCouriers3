@@ -89,25 +89,37 @@ function ecsUpdate.init()
                         local kd = 0.1
                         local bias = 0
 
-                        setRps = PLAYER.STOP_HEADING
+                        setRps = PLAYER.STOP_HEADING    -- desired heading
                         getRps = currentheading
 
                         value_out_prior = value_out or 0
                         error = setRps - getRps
+                        if error > 180 then
+                            setRps = setRps - 360
+                            error = setRps - getRps
+                        end
+
+                        if error < -180 then
+                            setRps = 360 + setRps
+                            error = setRps - getRps
+                        end
+
                         integral = integral_prior+error
                         derivative = error-error_prior
 
                         value_out = kp*error+ki*integral+kd*derivative+bias
+
+    print(getRps, setRps, error, value_out_prior, value_out)
 
                         error_prior = error
                         integral_prior = integral
 
                         if value_out > value_out_prior then
                             physEntity.body:applyTorque(entity.sideThrusters.rotation * 1)
-                            print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning right")
+                            -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning right")
                         else
                             physEntity.body:applyTorque(entity.sideThrusters.rotation * -1)
-                            print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
+                            -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
                         end
 
     -- print(setRps,getRps,error)
