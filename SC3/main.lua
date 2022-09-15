@@ -132,6 +132,11 @@ function love.mousereleased( x, y, button, istouch, presses )
 					GAME_MODE = enum.gamemodeAction
 					buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
 					GAME_TIMER = GAME_TIMER_DEFAULT
+
+					-- need to work out some rotation details
+					local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
+					if targetheading == nil then targetheading = currentheading end
+					PLAYER.STOP_HEADING = targetheading
 				end
 			end
 		end
@@ -241,8 +246,6 @@ function love.update(dt)
 			if GAME_TIMER <= 0 then
 				GAME_MODE = enum.gamemodePlanning
 				buttons.makeButtonVisible(enum.buttonEndTurn, GUI_BUTTONS)
-				PLAYER.CURRENTHEADING = nil
-				PLAYER.DESIREDHEADING = nil
 				-- physics.cancelAngularVelocity(PLAYER.UID)		-- applies to player only
 			end
 		else

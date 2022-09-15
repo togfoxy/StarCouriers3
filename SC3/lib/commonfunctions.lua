@@ -411,3 +411,30 @@ function convRadToCompass(rad)
 	return deg
 	-- return cf.adjustHeading(deg, -90)
 end
+
+function convCompassToRad(compass)
+	local rad = math.rad(compass)
+	return rad
+end
+
+function getTurnDirection(currentheading, desiredheading)
+    -- returns a string: "left" or "right" or "none"
+    local result
+    local angledelta = desiredheading - currentheading
+
+    -- determine if cheaper to turn left or right
+    local leftdistance = currentheading - desiredheading
+    if leftdistance < 0 then leftdistance = 360 + leftdistance end      -- this is '+' because leftdistance is a negative value
+
+    local rightdistance = desiredheading - currentheading
+    if rightdistance < 0 then rightdistance = 360 + rightdistance end   -- this is '+' because leftdistance is a negative value
+
+    if leftdistance < rightdistance then
+        result = "left"
+    elseif rightdistance < leftdistance then
+        result = "right"
+    else
+        result = "none"     -- no turning required
+    end
+    return result
+end

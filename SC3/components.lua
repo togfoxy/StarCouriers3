@@ -40,6 +40,7 @@ end
 
 local function initialiseDeckComponents()
     -- don't forget to :give inside functions.loadDeck()
+    -- quadnumber = nil means there is no image/quad
 
     concord.component("dummy", function(c)
         c.label = nil
@@ -50,7 +51,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 1.00          -- 100% = full thrust
-        c.quadnumber = 2           -- which quad to draw
+        c.quadnumber = 3           -- which quad to draw
     end)
     concord.component("halfThrust", function(c)
         c.label = "Half forward thrust"
@@ -58,7 +59,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 0.50          -- 100% = full thrust
-        c.quadnumber = 6           -- which quad to draw
+        c.quadnumber = 4           -- which quad to draw
     end)
     concord.component("quarterThrust", function(c)
         c.label = "Quarter forward thrust"
@@ -66,7 +67,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 0.25          -- 100% = full thrust
-        c.quadnumber = 10           -- which quad to draw
+        c.quadnumber = nil          -- which quad to draw
     end)
     concord.component("fullReverse", function(c)
         c.label = "Full reverse"
@@ -74,7 +75,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = -1.00          -- 100% = full thrust
-        c.quadnumber = 4           -- which quad to draw
+        c.quadnumber = 12           -- which quad to draw
     end)
     concord.component("halfReverse", function(c)
         c.label = "Half reverse"
@@ -82,56 +83,56 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = -0.500          -- 100% = full thrust
-        c.quadnumber = 0           -- which quad to draw
+        c.quadnumber = 8           -- which quad to draw
     end)
 
     concord.component("turnToNorth", function(c)
         c.label = "Turn to north"
         c.selected = false
         c.targetheading = 0
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 6           -- which quad to draw
     end)
     concord.component("turnToNorthEast", function(c)
         c.label = "Turn to north east"
         c.selected = false
         c.targetheading = 45
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 7           -- which quad to draw
     end)
     concord.component("turnToEast", function(c)
         c.label = "Turn to east"
         c.selected = false
         c.targetheading = 90
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 2           -- which quad to draw
     end)
     concord.component("turnToSouthEast", function(c)
         c.label = "Turn to south east"
         c.selected = false
         c.targetheading = 135
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 11           -- which quad to draw
     end)
     concord.component("turnToSouth", function(c)
         c.label = "Turn to south"
         c.selected = false
         c.targetheading = 180
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 10           -- which quad to draw
     end)
     concord.component("turnToSouthWest", function(c)
         c.label = "Turn to south west"
         c.selected = false
         c.targetheading = 225
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 9           -- which quad to draw
     end)
     concord.component("turnToWest", function(c)
         c.label = "Turn to west"
         c.selected = false
         c.targetheading = 270
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 1           -- which quad to draw
     end)
     concord.component("turnToNorthWest", function(c)
         c.label = "Turn to north west"
         c.selected = false
         c.targetheading = 315
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 5           -- which quad to draw
     end)
 
 end
