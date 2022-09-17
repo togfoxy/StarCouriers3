@@ -294,6 +294,7 @@ function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 		-- collision is with border. Do nothing.
 	elseif userdatatable1.objectType == "Starbase" or userdatatable2.objectType == "Starbase" then
 		-- go to shop
+	print("alpha: " .. userdatatable1.objectType, userdatatable2.objectType)
 		TRANSLATEX = SCREEN_WIDTH / 2
 		TRANSLATEY = SCREEN_HEIGHT / 2
 		ZOOMFACTOR = 1

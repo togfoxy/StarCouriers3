@@ -168,6 +168,13 @@ function draw.HUD()
 			local txt = component.label .. " : " .. cf.round(component.currentHP)
 			love.graphics.print(txt, drawx, drawy)
 			drawy = drawy + 25
+
+			if component.label == "Side thrusters" then
+				txt = "     Thrust: " .. component.rotation
+				love.graphics.print(txt, drawx, drawy)
+				drawy = drawy + 25
+			end
+
 		end
 	end
 end

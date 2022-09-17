@@ -109,8 +109,6 @@ function ecsUpdate.init()
 
                         value_out = kp*error+ki*integral+kd*derivative+bias
 
-    print(getRps, setRps, error, value_out_prior, value_out)
-
                         error_prior = error
                         integral_prior = integral
 
@@ -121,8 +119,6 @@ function ecsUpdate.init()
                             physEntity.body:applyTorque(entity.sideThrusters.rotation * -1)
                             -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
                         end
-
-    -- print(setRps,getRps,error)
 
                         if math.abs(error) <= 1 and math.abs(physEntity.body:getAngularVelocity()) <= 0.15 then
                             physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
