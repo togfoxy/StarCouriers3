@@ -1,6 +1,8 @@
 comp = {}
 
 local function initialiseShipComponents()
+    -- define components here
+    -- then give them to the player in functions.establishPlayerECS()
 
     concord.component("chassis", function(c)
         c.label = "Chassis"
@@ -28,13 +30,23 @@ local function initialiseShipComponents()
     concord.component("sideThrusters", function(c)
 		c.label = "Side thrusters"
         c.size = love.math.random(1,3) + love.math.random(1,3)      -- left + right thrusters so do size twice
-        c.rotation = PHYSICS_TURNRATE + love.math.random(1,6) * 50      -- rotation strength (angular)
+        c.strength = PHYSICS_TURNRATE + love.math.random(1,6) * 50      -- rotation strength (angular)
 		c.maxHP = love.math.random(1,3) * 1000
 		c.currentHP = c.maxHP
         c.purchasePrice = 2000
         c.destroyed = false
-        c.description = "Turns your vessel. Size " .. c.size .. ". Health " .. c.maxHP .. ". Thrust " .. c.rotation .. "."
+        c.description = "Turns your vessel. Size " .. c.size .. ". Health " .. c.maxHP .. ". Thrust " .. c.strength .. "."
         c.description = c.description .. "\nStronger thrusters enable faster turning."
+    end)
+    concord.component("battery", function(c)
+        c.label = "Battery"
+        c.size = love.math.random(1,3)
+        c.capacity = love.math.random(60, 240)   -- how much dt it holds (seconds)
+        c.maxCapacity = c.capacity
+        c.maxHP = love.math.random(1,3) * 1000
+        c.currentHP = c.maxHP
+        c.purchasePrice = 1000
+        c.description = "Powers lasers. Size " .. c.size .. ". Health " .. c.maxHP .. ". Capacity " .. c.maxCapacity .. "."
     end)
 
 

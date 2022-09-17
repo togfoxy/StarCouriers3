@@ -157,7 +157,7 @@ function draw.asteroids()
 end
 
 function draw.HUD()
-	local drawx = SCREEN_WIDTH - 150
+	local drawx = SCREEN_WIDTH - 200
 	local drawy = 50
 
 	-- draw the ship components
@@ -170,16 +170,25 @@ function draw.HUD()
 			else
 				love.graphics.setColor(1,1,1,1)
 			end
-		
-			local txt = component.label .. " : " .. cf.round(component.currentHP)
+
+			local txt = component.label .. " health: " .. cf.round(component.currentHP)
 			love.graphics.print(txt, drawx, drawy)
 			drawy = drawy + 25
 
-			if component.label == "Side thrusters" then
-				txt = "     Thrust: " .. component.rotation
+			if component.strength ~= nil then
+				txt = "     Thrust: " .. component.strength
 				love.graphics.print(txt, drawx, drawy)
 				drawy = drawy + 25
 			end
+
+			if component.capacity ~= nil then
+				txt = "     Qty left: " .. component.capacity
+				love.graphics.print(txt, drawx, drawy)
+				drawy = drawy + 25
+			end
+
+
+
 
 		end
 	end

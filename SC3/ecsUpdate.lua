@@ -113,10 +113,10 @@ function ecsUpdate.init()
                         integral_prior = integral
 
                         if value_out > value_out_prior then
-                            physEntity.body:applyTorque(entity.sideThrusters.rotation * 1)
+                            physEntity.body:applyTorque(entity.sideThrusters.strength * 1)
                             -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning right")
                         else
-                            physEntity.body:applyTorque(entity.sideThrusters.rotation * -1)
+                            physEntity.body:applyTorque(entity.sideThrusters.strength * -1)
                             -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
                         end
 
