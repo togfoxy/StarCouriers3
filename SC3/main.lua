@@ -118,7 +118,7 @@ function love.mousereleased( x, y, button, istouch, presses )
 							if mousedist <= (CARD_WIDTH / 2) then
 								component.selected = not component.selected
 								-- if target direction has changed then reset PID
-								if component.rotation ~= nil then
+								if component.strength ~= nil then
 									integral = 0
 									previous_error = 0
 								end

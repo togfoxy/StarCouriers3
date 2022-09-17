@@ -71,14 +71,13 @@ function ecsUpdate.init()
             else
             end
 
-            if entity.engine.currentHP > 0 then
+            if not entity.engine.destroyed then
                 -- thrust
-
                 local vectordistance = entity.engine.strength * requestedthrust     -- amount of force
                 applyForce(physEntity, vectordistance, dt)
             end
 
-            if entity.sideThrusters.currentHP > 0 then
+            if not entity.sideThrusters.destroyed then
                 -- apply rotation if necessary
                 local currentheading = cf.convRadToCompass(physEntity.body:getAngle())
                 if PLAYER.STOP_HEADING ~= nil then
@@ -109,20 +108,16 @@ function ecsUpdate.init()
 
                         value_out = kp*error+ki*integral+kd*derivative+bias
 
-    print(getRps, setRps, error, value_out_prior, value_out)
-
                         error_prior = error
                         integral_prior = integral
 
                         if value_out > value_out_prior then
-                            physEntity.body:applyTorque(entity.sideThrusters.rotation * 1)
+                            physEntity.body:applyTorque(entity.sideThrusters.strength * 1)
                             -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning right")
                         else
-                            physEntity.body:applyTorque(entity.sideThrusters.rotation * -1)
+                            physEntity.body:applyTorque(entity.sideThrusters.strength * -1)
                             -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
                         end
-
-    -- print(setRps,getRps,error)
 
                         if math.abs(error) <= 1 and math.abs(physEntity.body:getAngularVelocity()) <= 0.15 then
                             physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
@@ -138,6 +133,41 @@ function ecsUpdate.init()
         end
     end
     ECSWORLD:addSystems(systemEngine)
+
+    systemOxyTank = concord.system({
+    pool = {"oxyTank"}
+    })
+    function systemOxyTank:update(dt)
+        for _, entity in ipairs(self.pool) do
+            if entity:has("oxyGenerator") and not entity.oxyGenerator.destroyed and entity:has("battery") and not entity.battery.destroyed then
+                -- charge the tank in the generator update function
+            else
+                -- drain the tank
+                entity.oxyTank.capacity = entity.oxyTank.capacity - dt
+                if entity.oxyTank.capacity <= 0 then entity.oxyTank.capacity = 0 end
+            end
+        end
+    end
+    ECSWORLD:addSystems(systemOxyTank)
+
+    systemOxyGen = concord.system({
+    pool = {"oxyGenerator"}
+    })
+    function systemOxyGen:update(dt)
+        for _, entity in ipairs(self.pool) do
+            if not entity.oxyGenerator.destroyed and entity:has("battery") and not entity.battery.destroyed then
+                if entity.battery.capacity > dt then
+                    -- charge the tank
+                    entity.oxyTank.capacity = entity.oxyTank.capacity + dt
+                    if entity.oxyTank.capacity >= entity.oxyTank.maxCapacity then entity.oxyTank.capacity = entity.oxyTank.maxCapacity end
+                    -- drain the battery
+                    entity.battery.capacity = entity.battery.capacity - dt
+                    if entity.battery.capacity < 0 then entity.battery.capacity = 0 end
+                end
+            end
+        end
+    end
+    ECSWORLD:addSystems(systemOxyGen)
 end
 
 return ecsUpdate

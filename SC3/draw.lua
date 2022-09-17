@@ -157,7 +157,7 @@ function draw.asteroids()
 end
 
 function draw.HUD()
-	local drawx = SCREEN_WIDTH - 150
+	local drawx = SCREEN_WIDTH - 200
 	local drawy = 50
 
 	-- draw the ship components
@@ -165,9 +165,32 @@ function draw.HUD()
 	local allComponents = entity:getComponents()
 	for _, component in pairs(allComponents) do
 		if component.currentHP ~= nil then
-			local txt = component.label .. " : " .. cf.round(component.currentHP)
+			if component.destroyed then
+				love.graphics.setColor(1,0,0,1)
+			else
+				love.graphics.setColor(1,1,1,1)
+			end
+
+			local txt = component.label .. " health: " .. cf.round(component.currentHP)
 			love.graphics.print(txt, drawx, drawy)
 			drawy = drawy + 25
+
+			if component.strength ~= nil then
+				txt = "     Thrust: " .. component.strength
+				love.graphics.print(txt, drawx, drawy)
+				drawy = drawy + 25
+			end
+
+			if component.capacity ~= nil then
+				if component.capacity <= (component.maxCapacity * 0.10) then
+					love.graphics.setColor(1,0,0,1)
+				else
+					love.graphics.setColor(1,1,1,1)
+				end
+				txt = "     Qty left: " .. cf.round(component.capacity)
+				love.graphics.print(txt, drawx, drawy)
+				drawy = drawy + 25
+			end
 		end
 	end
 end

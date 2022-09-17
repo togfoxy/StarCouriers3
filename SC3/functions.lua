@@ -9,7 +9,9 @@ function functions.establishPlayerECS()
     :give("chassis")
     :give("engine")
     :give("sideThrusters")
-    :give("fullReverse")
+    :give("battery")
+    :give("oxyTank")
+    :give("oxyGenerator")
 
     table.insert(ECS_ENTITIES, entity)
     PLAYER.UID = entity.uid.value 		-- store this for easy recall
