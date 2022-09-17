@@ -133,6 +133,41 @@ function ecsUpdate.init()
         end
     end
     ECSWORLD:addSystems(systemEngine)
+
+    systemOxyTank = concord.system({
+    pool = {"oxyTank"}
+    })
+    function systemOxyTank:update(dt)
+        for _, entity in ipairs(self.pool) do
+            if entity:has("oxyGenerator") and not entity.oxyGenerator.destroyed and entity:has("battery") and not entity.battery.destroyed then
+                -- charge the tank in the generator update function
+            else
+                -- drain the tank
+                entity.oxyTank.capacity = entity.oxyTank.capacity - dt
+                if entity.oxyTank.capacity <= 0 then entity.oxyTank.capacity = 0 end
+            end
+        end
+    end
+    ECSWORLD:addSystems(systemOxyTank)
+
+    systemOxyGen = concord.system({
+    pool = {"oxyGenerator"}
+    })
+    function systemOxyGen:update(dt)
+        for _, entity in ipairs(self.pool) do
+            if not entity.oxyGenerator.destroyed and entity:has("battery") and not entity.battery.destroyed then
+                if entity.battery.capacity > dt then
+                    -- charge the tank
+                    entity.oxyTank.capacity = entity.oxyTank.capacity + dt
+                    if entity.oxyTank.capacity >= entity.oxyTank.maxCapacity then entity.oxyTank.capacity = entity.oxyTank.maxCapacity end
+                    -- drain the battery
+                    entity.battery.capacity = entity.battery.capacity - dt
+                    if entity.battery.capacity < 0 then entity.battery.capacity = 0 end
+                end
+            end
+        end
+    end
+    ECSWORLD:addSystems(systemOxyGen)
 end
 
 return ecsUpdate

@@ -182,7 +182,12 @@ function draw.HUD()
 			end
 
 			if component.capacity ~= nil then
-				txt = "     Qty left: " .. component.capacity
+				if component.capacity <= (component.maxCapacity * 0.10) then
+					love.graphics.setColor(1,0,0,1)
+				else
+					love.graphics.setColor(1,1,1,1)
+				end
+				txt = "     Qty left: " .. cf.round(component.capacity)
 				love.graphics.print(txt, drawx, drawy)
 				drawy = drawy + 25
 			end

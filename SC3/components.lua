@@ -48,7 +48,27 @@ local function initialiseShipComponents()
         c.purchasePrice = 1000
         c.description = "Powers lasers. Size " .. c.size .. ". Health " .. c.maxHP .. ". Capacity " .. c.maxCapacity .. "."
     end)
-
+    concord.component("oxyTank", function(c)
+        c.label = "O2 tank"
+        c.size = love.math.random(1,3)
+        c.capacity = love.math.random(300, 600)   -- 430   -- how much dt it holds (seconds)
+        c.maxCapacity = c.capacity
+        c.maxHP = love.math.random(1,3) * 1000
+        c.currentHP = c.maxHP
+        c.purchasePrice = 1000
+        c.destroyed = false
+        c.description = "Holds spare oxygen. Size " .. c.size .. ". Health " .. c.maxHP .. ". Capactiy " .. c.capacity .. " seconds."
+    end)
+    concord.component("oxyGenerator", function(c)
+        c.label = "O2 Generator"
+        c.size = love.math.random(1,3)
+        c.powerNeeds = love.math.random(1,3)        -- how much power per dt
+        c.maxHP = love.math.random(1,3) * 1000
+        c.currentHP = c.maxHP
+        c.purchasePrice = 1000
+        c.destroyed = false
+        c.description = "Makes O2 to keep you alive. Size " .. c.size .. ". Health " .. c.maxHP .. ". Draws " .. c.powerNeeds .. " per second."
+    end)
 
 end
 
