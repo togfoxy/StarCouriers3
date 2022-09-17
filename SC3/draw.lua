@@ -165,6 +165,12 @@ function draw.HUD()
 	local allComponents = entity:getComponents()
 	for _, component in pairs(allComponents) do
 		if component.currentHP ~= nil then
+			if component.destroyed then
+				love.graphics.setColor(1,0,0,1)
+			else
+				love.graphics.setColor(1,1,1,1)
+			end
+		
 			local txt = component.label .. " : " .. cf.round(component.currentHP)
 			love.graphics.print(txt, drawx, drawy)
 			drawy = drawy + 25

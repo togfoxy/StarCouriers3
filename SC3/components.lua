@@ -20,6 +20,7 @@ local function initialiseShipComponents()
         c.maxHP = love.math.random(2,4) * 1000
         c.currentHP = c.maxHP
         c.purchasePrice = 1000
+        c.destroyed = false
         c.description = "Main propulsion. Size " .. c.size .. ". Health " .. c.maxHP .. ". Thrust " .. c.strength .. "."
         c.x = -10
         c.y = 10
@@ -31,6 +32,7 @@ local function initialiseShipComponents()
 		c.maxHP = love.math.random(1,3) * 1000
 		c.currentHP = c.maxHP
         c.purchasePrice = 2000
+        c.destroyed = false
         c.description = "Turns your vessel. Size " .. c.size .. ". Health " .. c.maxHP .. ". Thrust " .. c.rotation .. "."
         c.description = c.description .. "\nStronger thrusters enable faster turning."
     end)
