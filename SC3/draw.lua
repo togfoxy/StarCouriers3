@@ -186,10 +186,6 @@ function draw.HUD()
 				love.graphics.print(txt, drawx, drawy)
 				drawy = drawy + 25
 			end
-
-
-
-
 		end
 	end
 end

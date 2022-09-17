@@ -360,12 +360,13 @@ function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 			if userdatatable1.objectType == "Player" or userdatatable1.objectType == "Pod" then
 				local entity = fun.getEntity(uid1)
 				local component = fun.getRandomComponent(entity)
-	print(component.currentHP, impactspeed)
-							component.currentHP = component.currentHP - impactspeed
-	print(component.currentHP)
+				print("Bravo: " .. component.currentHP, impactspeed)
+				component.currentHP = component.currentHP - impactspeed
+				print("Charlie: " .. component.currentHP)
 				print(component.label .. " is damaged.")
 				if component.currentHP <= 0 then
 					component.currentHP = 0
+					component.destroyed = true
 				end
 				local rndscrape = love.math.random(1,2)
 				if rndscrape == 1 then
@@ -379,12 +380,13 @@ function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 			if userdatatable2.objectType == "Player" or userdatatable2.objectType == "Pod" then
 				local entity = fun.getEntity(uid2)
 				local component = fun.getRandomComponent(entity)
-	print(component.currentHP, impactspeed)
+				print("Delta: " .. component.currentHP, impactspeed)
 				component.currentHP = component.currentHP - impactspeed
-	print(component.currentHP)
+				print("Echo: " .. component.currentHP)
 				print(component.label .. " is damaged.")
 				if component.currentHP <= 0 then
 					component.currentHP = 0
+					component.destroyed = true
 				end
 				local rndscrape = love.math.random(1,2)
 				if rndscrape == 1 then

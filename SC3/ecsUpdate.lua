@@ -71,14 +71,13 @@ function ecsUpdate.init()
             else
             end
 
-            if entity.engine.currentHP > 0 then
+            if not entity.engine.destroyed then
                 -- thrust
-
                 local vectordistance = entity.engine.strength * requestedthrust     -- amount of force
                 applyForce(physEntity, vectordistance, dt)
             end
 
-            if entity.sideThrusters.currentHP > 0 then
+            if not entity.sideThrusters.destroyed then
                 -- apply rotation if necessary
                 local currentheading = cf.convRadToCompass(physEntity.body:getAngle())
                 if PLAYER.STOP_HEADING ~= nil then
