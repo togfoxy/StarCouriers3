@@ -27,9 +27,12 @@ function constants.load()
     TRANSLATEY = 1
     ZOOMFACTOR = 1
 
-    error_prior = 0
-    integral_prior = 0
-    value_out_prior = 0
+    rotation_error_prior = 0
+    rotation_integral_prior = 0
+    rotation_value_out_prior = 0
+    thrust_error_prior = 0
+    thrust_integral_prior = 0
+    thrust_value_out_prior = 0
 
     NUMBER_OF_ASTEROIDS = GAME_STAGE
 

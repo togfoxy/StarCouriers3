@@ -45,7 +45,7 @@ function functions.loadDeck()
             thisdeck:give("fullThrust")
             thisdeck:give("halfThrust")
             thisdeck:give("quarterThrust")
-            thisdeck:give("fullReverse")
+            thisdeck:give("fullStop")
         end
         if component.label == "Side thrusters" then
             thisdeck:give("turnToNorth")

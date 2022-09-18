@@ -65,9 +65,38 @@ function ecsUpdate.init()
                 -- this is the player so treat it differently
                 -- get the requested thrust from CARDS
                 requestedthrust = getRequestedThrust()      --! need to factor damaged reverse thrusters
-                -- requestedturn = getRequestedTurn()
-
                 physEntity = physics.getPhysEntity(PLAYER.UID)
+
+                if ECS_DECK[1].fullStop.selected then
+                    local dx, dy = physEntity.body:getLinearVelocity()
+                    if math.abs(dx) > 1 or math.abs(dy) > 1 then
+                        local kp = 0.2
+                        local ki = 0.001
+                        local kd = 0.1
+                        local bias = 0
+
+                        local currentvelocity = cf.GetDistance(0,0,dx, dy)
+
+
+                        local setRps = 0    -- desired velocity
+                        local getRps = currentvelocity
+
+                        thrust_value_out_prior = thrust_value_out or 0
+                        local error = setRps - getRps
+                        local integral = rotation_integral_prior + error
+                        local derivative = error - rotation_error_prior
+
+                        thrust_value_out = kp*error+ki*integral+kd*derivative+bias    -- global
+
+                        if thrust_value_out > thrust_value_out_prior then
+print("Current v: " .. currentvelocity)
+                        else
+print("ho")
+                        end
+                    else
+                        physEntity.body:setLinearVelocity(0,0)
+                    end
+                end
             else
             end
 
@@ -88,11 +117,11 @@ function ecsUpdate.init()
                         local kd = 0.1
                         local bias = 0
 
-                        setRps = PLAYER.STOP_HEADING    -- desired heading
-                        getRps = currentheading
+                        local setRps = PLAYER.STOP_HEADING    -- desired heading
+                        local getRps = currentheading
 
-                        value_out_prior = value_out or 0
-                        error = setRps - getRps
+                        rotation_value_out_prior = rotation_value_out or 0
+                        local error = setRps - getRps
                         if error > 180 then
                             setRps = setRps - 360
                             error = setRps - getRps
@@ -103,15 +132,15 @@ function ecsUpdate.init()
                             error = setRps - getRps
                         end
 
-                        integral = integral_prior+error
-                        derivative = error-error_prior
+                        local integral = rotation_integral_prior + error
+                        local derivative = error - rotation_error_prior
 
-                        value_out = kp*error+ki*integral+kd*derivative+bias
+                        rotation_value_out = kp*error+ki*integral+kd*derivative+bias    -- global
 
-                        error_prior = error
-                        integral_prior = integral
+                        rotation_error_prior = error
+                        rotation_integral_prior = integral
 
-                        if value_out > value_out_prior then
+                        if rotation_value_out > rotation_value_out_prior then
                             physEntity.body:applyTorque(entity.sideThrusters.strength * 1)
                             -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning right")
                         else
@@ -123,9 +152,9 @@ function ecsUpdate.init()
                             physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
                             physEntity.body:setAngularVelocity(0)
                             PLAYER.STOP_HEADING = nil
-                            error_prior = 0
-                            integral_prior = 0
-                            value_out_prior = 0
+                            rotation_error_prior = 0
+                            rotation_integral_prior = 0
+                            rotation_value_out_prior = 0
                         end
                     end
                 end
