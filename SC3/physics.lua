@@ -399,17 +399,4 @@ function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 	end
 end
 
-
-
 return physics
-
--- local kp = 0.1
--- local ki = 0.1
--- local kd = 0.1
--- local error = targetheading - currentheading
--- integral = integral + (error * dt)
--- derivative = (error - previous_error) / dt
--- local output = (kp * error) + (ki * integral) + (kd * derivative)
--- previous_error = error
---
--- print("PID output:" .. output)

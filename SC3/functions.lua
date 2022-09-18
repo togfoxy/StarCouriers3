@@ -45,7 +45,7 @@ function functions.loadDeck()
             thisdeck:give("fullThrust")
             thisdeck:give("halfThrust")
             thisdeck:give("quarterThrust")
-            thisdeck:give("fullReverse")
+            thisdeck:give("fullStop")
         end
         if component.label == "Side thrusters" then
             thisdeck:give("turnToNorth")
@@ -120,7 +120,7 @@ function functions.InitialiseGame()
     ecsUpdate.init()
 
 	physics.establishPhysicsWorld()		-- creates borders, starbase and player vessel and player physics
-    NUMBER_OF_ASTEROIDS = GAME_STAGE        -- not even sure why there is a global here
+    NUMBER_OF_ASTEROIDS = 4 + GAME_STAGE
 	for i = 1, NUMBER_OF_ASTEROIDS do
 		physics.createAsteroid()
 	end
