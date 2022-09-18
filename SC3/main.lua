@@ -76,9 +76,24 @@ function love.keyreleased( key, scancode )
 		        end
 		    end
 			-- need to create asteroids
-			NUMBER_OF_ASTEROIDS = GAME_STAGE        -- not even sure why there is a global here
+			NUMBER_OF_ASTEROIDS = 4 + GAME_STAGE        -- not even sure why there is a global here
 			for i = 1, NUMBER_OF_ASTEROIDS do
 				physics.createAsteroid()
+			end
+
+			-- clear all the cards to 'unselected'
+			local allComponents = ECS_DECK[1]:getComponents()
+		    for _, component in pairs(allComponents) do
+				component.selected = false
+		    end
+
+			-- refill all components with capacity
+			local entity = fun.getEntity(PLAYER.UID)
+			local allComponents = entity:getComponents()
+			for _, component in pairs(allComponents) do
+				if component.capacity ~= nil then
+					component.capacity = component.maxCapacity
+				end
 			end
 		end
 		cf.RemoveScreen(SCREEN_STACK)

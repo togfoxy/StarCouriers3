@@ -12,7 +12,7 @@ function constants.load()
     PLAYER_START_X = FIELD_WIDTH / 2
     PLAYER_START_Y = (FIELD_HEIGHT) - 175
 
-    GAME_STAGE = 30
+    GAME_STAGE = 1
     GAME_TIMER_DEFAULT = 5
     GAME_TIMER = GAME_TIMER_DEFAULT      -- loop for this many seconds
 
@@ -34,7 +34,7 @@ function constants.load()
     thrust_integral_prior = 0
     thrust_value_out_prior = 0
 
-    NUMBER_OF_ASTEROIDS = GAME_STAGE
+    NUMBER_OF_ASTEROIDS = 4 + GAME_STAGE
 
     SCREEN_STACK = {}
     GUI_BUTTONS = {}

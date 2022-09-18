@@ -70,31 +70,9 @@ function ecsUpdate.init()
                 if ECS_DECK[1].fullStop.selected then
                     local dx, dy = physEntity.body:getLinearVelocity()
                     if math.abs(dx) > 1 or math.abs(dy) > 1 then
-                        local kp = 0.2
-                        local ki = 0.001
-                        local kd = 0.1
-                        local bias = 0
-
-                        local currentvelocity = cf.GetDistance(0,0,dx, dy)
-
-
-                        local setRps = 0    -- desired velocity
-                        local getRps = currentvelocity
-
-                        thrust_value_out_prior = thrust_value_out or 0
-                        local error = setRps - getRps
-                        local integral = rotation_integral_prior + error
-                        local derivative = error - rotation_error_prior
-
-                        thrust_value_out = kp*error+ki*integral+kd*derivative+bias    -- global
-
-                        if thrust_value_out > thrust_value_out_prior then
-print("Current v: " .. currentvelocity)
-                        else
-print("ho")
-                        end
                     else
                         physEntity.body:setLinearVelocity(0,0)
+                        requestedthrust = 0
                     end
                 end
             else

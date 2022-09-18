@@ -120,7 +120,7 @@ function functions.InitialiseGame()
     ecsUpdate.init()
 
 	physics.establishPhysicsWorld()		-- creates borders, starbase and player vessel and player physics
-    NUMBER_OF_ASTEROIDS = GAME_STAGE        -- not even sure why there is a global here
+    NUMBER_OF_ASTEROIDS = 4 + GAME_STAGE
 	for i = 1, NUMBER_OF_ASTEROIDS do
 		physics.createAsteroid()
 	end
