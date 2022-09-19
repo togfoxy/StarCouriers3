@@ -51,50 +51,7 @@ function love.keyreleased( key, scancode )
 	if key == "escape" then
 		if currentscreen == enum.sceneShop then
 			-- prep for next round
-			local physEntity = physics.getPhysEntity(PLAYER.UID)
-			physEntity.body:setPosition(PLAYER_START_X, PLAYER_START_Y)
-
-			-- ensure there is no rotation
-			physEntity.body:setAngularVelocity(0)
-			physEntity.body:setAngle( 0 )		-- north or 'up'
-
-			local x1, y1 = physEntity.body:getPosition()
-
-			TRANSLATEX = (x1 * BOX2D_SCALE)
-			TRANSLATEY = (y1 * BOX2D_SCALE)
-			ZOOMFACTOR = 0.4
-
-			GAME_STAGE = GAME_STAGE + 1
-
-			--! move this asteroid destroy/create into a new function
-			-- need to delete all physics objects where temptable.objectType = "Asteroid"
-			for i = #PHYSICS_ENTITIES, 1, -1 do
-				local udtable = PHYSICS_ENTITIES[i].fixture:getUserData()
-				if udtable.objectType == "Asteroid" then
-		            PHYSICS_ENTITIES[i].body:destroy()
-		            table.remove(PHYSICS_ENTITIES, i)
-		        end
-		    end
-			-- need to create asteroids
-			NUMBER_OF_ASTEROIDS = 4 + GAME_STAGE        -- not even sure why there is a global here
-			for i = 1, NUMBER_OF_ASTEROIDS do
-				physics.createAsteroid()
-			end
-
-			-- clear all the cards to 'unselected'
-			local allComponents = ECS_DECK[1]:getComponents()
-		    for _, component in pairs(allComponents) do
-				component.selected = false
-		    end
-
-			-- refill all components with capacity
-			local entity = fun.getEntity(PLAYER.UID)
-			local allComponents = entity:getComponents()
-			for _, component in pairs(allComponents) do
-				if component.capacity ~= nil then
-					component.capacity = component.maxCapacity
-				end
-			end
+			fun.resetStage()
 		end
 		cf.RemoveScreen(SCREEN_STACK)
     end
@@ -258,11 +215,30 @@ function love.update(dt)
 			ECSWORLD:emit("update", dt)
 			PHYSICSWORLD:update(dt) --this puts the world into motion
 
+			-- decrease the trail
+			for i = #TRAIL, 1, -1 do
+				TRAIL[i].timer = TRAIL[i].timer - dt
+				if TRAIL[i].timer <= 0 then
+					table.remove(TRAIL, i)
+				end
+			end
+
+			-- capture the 'trail' for effect
+			if love.math.random(1,2) == 1 then		-- only capture every second dot for effect
+				local physicsEntity = physics.getPhysEntity(PLAYER.UID)
+				local x, y = physicsEntity.body:getPosition()
+				local newtrail = {}
+				newtrail.x = cf.round(x)
+				newtrail.y = cf.round(y)
+				newtrail.timer = 15		-- seconds
+				table.insert(TRAIL, newtrail)
+			end
+
 			if GAME_TIMER <= 0 then
 				GAME_MODE = enum.gamemodePlanning
 				buttons.makeButtonVisible(enum.buttonEndTurn, GUI_BUTTONS)
-				-- physics.cancelAngularVelocity(PLAYER.UID)		-- applies to player only
 			end
+
 		else
 			error()
 		end

@@ -78,14 +78,15 @@ function ecsUpdate.init()
             else
             end
 
+            -- thrust
             if not entity.engine.destroyed then
-                -- thrust
                 local vectordistance = entity.engine.strength * requestedthrust     -- amount of force
                 applyForce(physEntity, vectordistance, dt)
             end
 
+            -- apply rotation if necessary
             if not entity.sideThrusters.destroyed then
-                -- apply rotation if necessary
+
                 local currentheading = cf.convRadToCompass(physEntity.body:getAngle())
                 if PLAYER.STOP_HEADING ~= nil then
                     if currentheading ~= PLAYER.STOP_HEADING then
@@ -126,7 +127,10 @@ function ecsUpdate.init()
                             -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
                         end
 
-                        if math.abs(error) <= 1 and math.abs(physEntity.body:getAngularVelocity()) <= 0.15 then
+                        local angularvelocity = physEntity.body:getAngularVelocity()
+                        print("Angular velocity is " .. angularvelocity)
+
+                        if math.abs(error) <= 1 and math.abs(angularvelocity) <= 0.15 then
                             physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
                             physEntity.body:setAngularVelocity(0)
                             PLAYER.STOP_HEADING = nil
