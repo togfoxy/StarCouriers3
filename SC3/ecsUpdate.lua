@@ -61,9 +61,10 @@ function ecsUpdate.init()
             local physEntity
             local requestedthrust = 0
             local requestedturn = 0
+
+            -- get the requested thrust from CARDS
             if entity.uid.value == PLAYER.UID then
                 -- this is the player so treat it differently
-                -- get the requested thrust from CARDS
                 requestedthrust = getRequestedThrust()      --! need to factor damaged reverse thrusters
                 physEntity = physics.getPhysEntity(PLAYER.UID)
 
@@ -87,30 +88,23 @@ function ecsUpdate.init()
             -- apply rotation if necessary
             if not entity.sideThrusters.destroyed then
 
-                local currentheading = cf.convRadToCompass(physEntity.body:getAngle())
-                if PLAYER.STOP_HEADING ~= nil then
-                    if currentheading ~= PLAYER.STOP_HEADING then
+                currentrads = cf.round(physEntity.body:getAngle(),2)
 
+                if PLAYER.STOP_HEADING ~= nil then  -- radians
+
+                    if currentrads ~= PLAYER.STOP_HEADING then
+
+                        local angularvelocity = physEntity.body:getAngularVelocity()
                         local kp = 0.2
-                        local ki = 0.001
-                        local kd = 0.1
+                        local ki = 0
+                        local kd = 0
                         local bias = 0
 
                         local setRps = PLAYER.STOP_HEADING    -- desired heading
-                        local getRps = currentheading
+                        local getRps = currentrads
 
                         rotation_value_out_prior = rotation_value_out or 0
                         local error = setRps - getRps
-                        if error > 180 then
-                            setRps = setRps - 360
-                            error = setRps - getRps
-                        end
-
-                        if error < -180 then
-                            setRps = 360 + setRps
-                            error = setRps - getRps
-                        end
-
                         local integral = rotation_integral_prior + error
                         local derivative = error - rotation_error_prior
 
@@ -119,25 +113,23 @@ function ecsUpdate.init()
                         rotation_error_prior = error
                         rotation_integral_prior = integral
 
-                        if rotation_value_out > rotation_value_out_prior then
+                        if angularvelocity < rotation_value_out then
                             physEntity.body:applyTorque(entity.sideThrusters.strength * 1)
-                            -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning right")
+                            print("AV: " .. angularvelocity, "Output: " .. rotation_value_out, "turning right")
                         else
                             physEntity.body:applyTorque(entity.sideThrusters.strength * -1)
-                            -- print(cf.round(value_out), error, physEntity.body:getAngularVelocity(), "turning left")
+                            print("AV: " .. angularvelocity, "Output: " .. rotation_value_out, "turning left")
                         end
 
-                        local angularvelocity = physEntity.body:getAngularVelocity()
-                        print("Angular velocity is " .. angularvelocity)
+                        -- if math.abs(error) <= 0.1 and math.abs(physEntity.body:getAngularVelocity()) <= 0.15 then
+                        --     physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
+                        --     physEntity.body:setAngularVelocity(0)
+                        --     PLAYER.STOP_HEADING = nil
+                        --     rotation_error_prior = 0
+                        --     rotation_integral_prior = 0
+                        --     rotation_value_out_prior = 0
+                        -- end
 
-                        if math.abs(error) <= 1 and math.abs(angularvelocity) <= 0.15 then
-                            physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
-                            physEntity.body:setAngularVelocity(0)
-                            PLAYER.STOP_HEADING = nil
-                            rotation_error_prior = 0
-                            rotation_integral_prior = 0
-                            rotation_value_out_prior = 0
-                        end
                     end
                 end
             end

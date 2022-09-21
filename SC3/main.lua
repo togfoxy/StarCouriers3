@@ -106,9 +106,14 @@ function love.mousereleased( x, y, button, istouch, presses )
 					GAME_TIMER = GAME_TIMER_DEFAULT
 
 					-- need to work out some rotation details
+
 					local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
-					if targetheading == nil then targetheading = currentheading end
-					PLAYER.STOP_HEADING = targetheading
+					if targetheading ~= nil then
+						-- STOP_HEADING is in radians with two decimal places
+						PLAYER.STOP_HEADING = cf.round(cf.convCompassToRad(targetheading),2)
+					else
+						PLAYER.STOP_HEADING = nil
+					end
 				end
 			end
 		end
