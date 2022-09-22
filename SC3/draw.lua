@@ -111,6 +111,16 @@ local function drawAsteroids()
 	end
 end
 
+local function drawTrail()
+	for k,v in pairs(TRAIL) do
+		local drawx = v.x * BOX2D_SCALE
+		local drawy = v.y * BOX2D_SCALE
+		local alpha = v.timer / 15
+		love.graphics.setColor(0,1,0,alpha)
+		love.graphics.points(drawx, drawy)
+	end
+end
+
 function draw.drawCards()
 	-- assumes the deck is already populated
 
@@ -154,6 +164,7 @@ function draw.asteroids()
 	ECSWORLD:emit("draw")		-- draws all entities
 	drawStartBase()
 	drawAsteroids()
+	drawTrail()
 end
 
 function draw.HUD()

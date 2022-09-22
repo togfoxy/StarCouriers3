@@ -13,6 +13,7 @@ function constants.load()
     PLAYER_START_Y = (FIELD_HEIGHT) - 175
 
     GAME_STAGE = 1
+    STARTING_ASTEROIDS = 10
     GAME_TIMER_DEFAULT = 5
     GAME_TIMER = GAME_TIMER_DEFAULT      -- loop for this many seconds
 
@@ -27,6 +28,7 @@ function constants.load()
     TRANSLATEY = 1
     ZOOMFACTOR = 1
 
+
     rotation_error_prior = 0
     rotation_integral_prior = 0
     rotation_value_out_prior = 0
@@ -34,7 +36,7 @@ function constants.load()
     thrust_integral_prior = 0
     thrust_value_out_prior = 0
 
-    NUMBER_OF_ASTEROIDS = 4 + GAME_STAGE
+    NUMBER_OF_ASTEROIDS = STARTING_ASTEROIDS + GAME_STAGE
 
     SCREEN_STACK = {}
     GUI_BUTTONS = {}
@@ -50,6 +52,7 @@ function constants.load()
     ECS_DECK = {}       -- deck of cards
     QUAD_ARROWS = {}        -- for the cards
     SOUND = {}
+    TRAIL = {}
 
     enum = {}               -- global
     enum.sceneMainMenu = 1

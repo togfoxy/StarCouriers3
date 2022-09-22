@@ -409,7 +409,6 @@ function convRadToCompass(rad)
 	if deg < 0 then deg = 360 + deg end
 	if deg > 359 then deg = deg - 360 end
 	return deg
-	-- return cf.adjustHeading(deg, -90)
 end
 
 function convCompassToRad(compass)

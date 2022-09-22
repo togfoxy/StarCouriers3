@@ -120,7 +120,7 @@ function functions.InitialiseGame()
     ecsUpdate.init()
 
 	physics.establishPhysicsWorld()		-- creates borders, starbase and player vessel and player physics
-    NUMBER_OF_ASTEROIDS = 4 + GAME_STAGE
+    NUMBER_OF_ASTEROIDS = STARTING_ASTEROIDS + GAME_STAGE
 	for i = 1, NUMBER_OF_ASTEROIDS do
 		physics.createAsteroid()
 	end
@@ -201,6 +201,56 @@ function functions.getDesiredHeading()
     end
 end
 
+function functions.resetStage()
+    local physEntity = physics.getPhysEntity(PLAYER.UID)
+    physEntity.body:setPosition(PLAYER_START_X, PLAYER_START_Y)
 
+    -- ensure there is no rotation
+    physEntity.body:setAngularVelocity(0)
+    physEntity.body:setAngle( 0 )		-- north or 'up'
+
+    local x1, y1 = physEntity.body:getPosition()
+
+    TRANSLATEX = (x1 * BOX2D_SCALE)
+    TRANSLATEY = (y1 * BOX2D_SCALE)
+    ZOOMFACTOR = 0.4
+
+    GAME_STAGE = GAME_STAGE + 1
+
+    --! move this asteroid destroy/create into a new function
+    -- need to delete all physics objects where temptable.objectType = "Asteroid"
+    for i = #PHYSICS_ENTITIES, 1, -1 do
+        local udtable = PHYSICS_ENTITIES[i].fixture:getUserData()
+        if udtable.objectType == "Asteroid" then
+            PHYSICS_ENTITIES[i].body:destroy()
+            table.remove(PHYSICS_ENTITIES, i)
+        end
+    end
+    -- need to create asteroids
+    NUMBER_OF_ASTEROIDS = STARTING_ASTEROIDS + GAME_STAGE        -- not even sure why there is a global here
+    for i = 1, NUMBER_OF_ASTEROIDS do
+        physics.createAsteroid()
+    end
+
+    -- clear all the cards to 'unselected'
+    local allComponents = ECS_DECK[1]:getComponents()
+    for _, component in pairs(allComponents) do
+        component.selected = false
+    end
+
+    -- refill all components with capacity
+    local entity = fun.getEntity(PLAYER.UID)
+    local allComponents = entity:getComponents()
+    for _, component in pairs(allComponents) do
+        if component.capacity ~= nil then
+            component.capacity = component.maxCapacity
+        end
+    end
+
+    -- clear the trail
+    TRAIL = {}
+
+
+end
 
 return functions
