@@ -101,24 +101,30 @@ function ecsUpdate.init()
                     currentrads = currentrads - (math.pi * 2)
                 end
 
-                if math.abs(desiredrads - currentrads) > math.pi then
+                -- if desired is more than 180 deg away then subtract 360 deg making ship turn left (shorter path)
+                if (desiredrads - currentrads) > math.pi then
                     desiredrads = desiredrads - (math.pi * 2)
-                    -- print("Desired rads = " .. desiredrads)
                 end
-                while desiredrads < (math.pi * -2) do
+                -- if desired is less than 180 deg away then add 360 deg making the ship turn right (shorter path)
+                if (currentrads - desiredrads) > math.pi then
                     desiredrads = desiredrads + (math.pi * 2)
                 end
-                while desiredrads > (math.pi * 2) do
-                    desiredrads = desiredrads - (math.pi * 2)
-                end
+
+                -- while desiredrads < (math.pi * -2) do
+                --     desiredrads = desiredrads + (math.pi * 2)
+                -- end
+                -- while desiredrads > (math.pi * 2) do
+                --     desiredrads = desiredrads - (math.pi * 2)
+                -- end
 
                 print(currentrads, desiredrads)
+                print("*************")
 
                 assert(currentrads < math.pi * 2)
                 assert(currentrads > (math.pi * -2))
 
-                assert(desiredrads < math.pi * 2)
-                assert(desiredrads > (math.pi * -2))
+                assert(desiredrads < math.pi * 3)   -- * 3 = 360 + 180 deg
+                assert(desiredrads > (math.pi * -3))
 
                 assert(PLAYER.STOP_HEADING < math.pi * 2)
                 assert(PLAYER.STOP_HEADING > (math.pi * -2))
