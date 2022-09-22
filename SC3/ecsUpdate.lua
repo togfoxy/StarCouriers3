@@ -88,7 +88,40 @@ function ecsUpdate.init()
             -- apply rotation if necessary
             if not entity.sideThrusters.destroyed then
 
-                currentrads = cf.round(physEntity.body:getAngle(),2)
+                local currentrads = cf.round(physEntity.body:getAngle(),2)
+                local desiredrads = PLAYER.STOP_HEADING    -- desired heading
+                if desiredrads == nil then
+                    desiredrads = currentrads
+                end
+
+                while currentrads < (math.pi * -2) do
+                    currentrads = currentrads + (math.pi * 2)
+                end
+                while currentrads > (math.pi * 2) do
+                    currentrads = currentrads - (math.pi * 2)
+                end
+
+                if math.abs(desiredrads - currentrads) > math.pi then
+                    desiredrads = desiredrads - (math.pi * 2)
+                    -- print("Desired rads = " .. desiredrads)
+                end
+                while desiredrads < (math.pi * -2) do
+                    desiredrads = desiredrads + (math.pi * 2)
+                end
+                while desiredrads > (math.pi * 2) do
+                    desiredrads = desiredrads - (math.pi * 2)
+                end
+
+                print(currentrads, desiredrads)
+
+                assert(currentrads < math.pi * 2)
+                assert(currentrads > (math.pi * -2))
+
+                assert(desiredrads < math.pi * 2)
+                assert(desiredrads > (math.pi * -2))
+
+                assert(PLAYER.STOP_HEADING < math.pi * 2)
+                assert(PLAYER.STOP_HEADING > (math.pi * -2))
 
                 if PLAYER.STOP_HEADING ~= nil then  -- radians
 
@@ -100,25 +133,22 @@ function ecsUpdate.init()
                         local kd = 0
                         local bias = 0
 
-                        local setRps = PLAYER.STOP_HEADING    -- desired heading
-                        local getRps = currentrads
-
                         rotation_value_out_prior = rotation_value_out or 0
-                        local error = setRps - getRps
+                        local error = desiredrads - currentrads
                         local integral = rotation_integral_prior + error
                         local derivative = error - rotation_error_prior
 
-                        rotation_value_out = kp*error+ki*integral+kd*derivative+bias    -- global
+                        rotation_value_out = kp * error + ki * integral + kd * derivative + bias    -- global
 
                         rotation_error_prior = error
                         rotation_integral_prior = integral
 
                         if angularvelocity < rotation_value_out then
                             physEntity.body:applyTorque(entity.sideThrusters.strength * 1)
-                            print("AV: " .. angularvelocity, "Output: " .. rotation_value_out, "turning right")
+                            -- print("AV: " .. angularvelocity, "Output: " .. rotation_value_out, "turning right")
                         else
                             physEntity.body:applyTorque(entity.sideThrusters.strength * -1)
-                            print("AV: " .. angularvelocity, "Output: " .. rotation_value_out, "turning left")
+                            -- print("AV: " .. angularvelocity, "Output: " .. rotation_value_out, "turning left")
                         end
 
                         -- if math.abs(error) <= 0.1 and math.abs(physEntity.body:getAngularVelocity()) <= 0.15 then
