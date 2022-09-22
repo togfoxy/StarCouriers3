@@ -33,7 +33,7 @@ comp = require 'components'
 ecsDraw = require 'ecsDraw'
 ecsUpdate = require 'ecsUpdate'
 -- fileops = require 'fileoperations'
--- keymaps = require 'keymaps'
+keymaps = require 'keymaps'
 buttons = require 'buttons'
 physics = require 'physics'
 
@@ -55,13 +55,31 @@ function love.keyreleased( key, scancode )
 		end
 		cf.RemoveScreen(SCREEN_STACK)
     end
-	if key == "kp5" then
+	if input:down("centreview") then
 		local x1, y1 = physics.getPhysEntityXY(PLAYER.UID)
 		TRANSLATEX = (x1 * BOX2D_SCALE)
 		TRANSLATEY = (y1 * BOX2D_SCALE)
 		ZOOMFACTOR = 0.4
 	end
 
+end
+
+function love.keypressed( key, scancode, isrepeat )
+	local translatefactor = 5 * (ZOOMFACTOR * 2)		-- screen moves faster when zoomed in
+
+	local shiftpressed = love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift")	-- either shift key will work
+	if shiftpressed then translatefactor = translatefactor * 2 end
+
+	local leftpressed = love.keyboard.isDown("left")
+	local rightpressed = love.keyboard.isDown("right")
+	local uppressed = love.keyboard.isDown("up")
+	local downpressed = love.keyboard.isDown("down")
+
+	-- adjust translatex/y based on keypress combinations
+	if leftpressed then TRANSLATEX = TRANSLATEX - translatefactor end
+	if rightpressed then TRANSLATEX = TRANSLATEX + translatefactor end
+	if uppressed then TRANSLATEY = TRANSLATEY - translatefactor end
+	if downpressed then TRANSLATEY = TRANSLATEY + translatefactor end
 end
 
 function love.mousereleased( x, y, button, istouch, presses )
@@ -171,7 +189,7 @@ function love.load()
 	fun.loadFonts()
 
 	buttons.load()			-- the buttons that are displayed on different gui's
-	-- keymaps.init()
+	keymaps.init()
     comp.init()
 
 	cf.AddScreen(enum.sceneMainMenu, SCREEN_STACK)
@@ -254,7 +272,7 @@ function love.update(dt)
 			error()
 		end
 
-		-- input:update()     -- baton key maps
+		input:update()     -- baton key maps
 
 		cam:setPos(TRANSLATEX, TRANSLATEY)
 		cam:setZoom(ZOOMFACTOR)
