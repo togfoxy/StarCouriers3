@@ -55,6 +55,12 @@ function love.keyreleased( key, scancode )
 		end
 		cf.RemoveScreen(SCREEN_STACK)
     end
+	if key == "kp5" then
+		local x1, y1 = physics.getPhysEntityXY(PLAYER.UID)
+		TRANSLATEX = (x1 * BOX2D_SCALE)
+		TRANSLATEY = (y1 * BOX2D_SCALE)
+		ZOOMFACTOR = 0.4
+	end
 
 end
 
