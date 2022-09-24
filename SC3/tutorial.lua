@@ -7,10 +7,10 @@ function tutorial.init()
         tutmsg[i] = {}
     end
 
-    tutmsg[1].txt = "Click the END button after you have selected cards to play"
-    tutmsg[1].duration = nil
-    tutmsg[1].x = 1000
-    tutmsg[1].y = 500
+    tutmsg[1].txt = "Click the END TURN button after" .. "\n" .. "you have selected cards to play"
+    tutmsg[1].duration = 1000
+    tutmsg[1].x = 1750
+    tutmsg[1].y = 875
     tutmsg[1].display = true
 
 end

@@ -251,7 +251,7 @@ function love.update(dt)
 		if GAME_MODE == enum.gamemodePlanning then
 			--
 			if tutmsg[1].display then
-				lovelyToasts.show("Click me", 300, nil, 1800, 900)
+				lovelyToasts.show(tutmsg[1].txt, tutmsg[1].duration, nil, tutmsg[1].x, tutmsg[1].y)
 				tutmsg[1].display = false
 			end
 
