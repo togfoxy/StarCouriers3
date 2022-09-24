@@ -12,6 +12,7 @@ function functions.establishPlayerECS()
     :give("battery")
     :give("oxyTank")
     :give("oxyGenerator")
+    :give("crewQuarters")
 
     table.insert(ECS_ENTITIES, entity)
     PLAYER.UID = entity.uid.value 		-- store this for easy recall
@@ -259,8 +260,20 @@ function functions.resetStage()
 
     -- clear the trail
     TRAIL = {}
+end
 
-
+function functions.countCardsSelected()
+    -- cycle through all the decks and return the number of cars selected
+    local result = 0
+    for i = 1, #ECS_DECK do
+        local allComponents = ECS_DECK[i]:getComponents()
+        for _, component in pairs(allComponents) do
+            if component.selected then
+                result = result + 1
+            end
+        end
+    end
+    return result
 end
 
 return functions

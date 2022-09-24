@@ -61,7 +61,6 @@ function love.keyreleased( key, scancode )
 		TRANSLATEY = (y1 * BOX2D_SCALE)
 		ZOOMFACTOR = 0.4
 	end
-
 end
 
 function love.keypressed( key, scancode, isrepeat )
@@ -115,7 +114,7 @@ function love.mousereleased( x, y, button, istouch, presses )
 								component.selected = not component.selected
 								-- if target direction has changed then reset PID
 								if component.strength ~= nil then
-									integral = 0
+									integral = 0		--! see if this can be removed
 									previous_error = 0
 								end
 							end
@@ -123,20 +122,26 @@ function love.mousereleased( x, y, button, istouch, presses )
 					end
 				end
 
-				-- end turn if button is clicked
+				-- end turn button is clicked
 				if mybuttonID == enum.buttonEndTurn then
-					GAME_MODE = enum.gamemodeAction
-					buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
-					GAME_TIMER = GAME_TIMER_DEFAULT
+					-- check too many cards aren't clicked
+					local entity = fun.getEntity(PLAYER.UID)
+					local crewsize = entity.crewQuarters.crewNumber
+					if fun.countCardsSelected() <= crewsize + 1 then
+						GAME_MODE = enum.gamemodeAction
+						buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
+						GAME_TIMER = GAME_TIMER_DEFAULT
 
-					-- need to work out some rotation details
-
-					local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
-					if targetheading ~= nil then
-						-- STOP_HEADING is in radians with two decimal places
-						PLAYER.STOP_HEADING = cf.round(cf.convCompassToRad(targetheading),2)
+						-- need to work out some rotation details
+						local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
+						if targetheading ~= nil then
+							-- STOP_HEADING is in radians with two decimal places
+							PLAYER.STOP_HEADING = cf.round(cf.convCompassToRad(targetheading),2)
+						else
+							PLAYER.STOP_HEADING = nil
+						end
 					else
-						PLAYER.STOP_HEADING = nil
+						--! display a msg that says too many cards selected
 					end
 				end
 			end
