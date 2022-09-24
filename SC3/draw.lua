@@ -129,8 +129,9 @@ function draw.drawCards()
 	local drawx = 100
 	local drawy = SCREEN_HEIGHT - 200
 
-	for k,v in pairs(ECS_DECK) do
-		local allComponents = v:getComponents()
+	-- for k,v in pairs(ECS_DECK) do
+	for i = 1, #ECS_DECK do
+		local allComponents = ECS_DECK[i]:getComponents()
 		for _, component in pairs(allComponents) do
 			local txt = component.label
 			if txt ~= "" and txt ~= nil then		-- things like 'drawable' don't have a label
@@ -154,6 +155,9 @@ function draw.drawCards()
 				drawx = drawx + CARD_WIDTH + 20
 			end
 		end
+		-- reset xy for the next deck
+		drawy = drawy - 175
+		drawx = 100
 	end
 
 	drawGUIButtons(enum.sceneAsteroids)
@@ -204,6 +208,28 @@ function draw.HUD()
 			end
 		end
 	end
+end
+
+function draw.drawVelocity(str, x1, y1)
+    -- x1, y1 = the position of the entity
+    -- input string and screen coordinates
+    -- doesn't use entity etc
+
+    -- print the text
+    drawx = x1 + 150
+    drawy = y1 - 115
+    love.graphics.setFont(FONT[enum.fontDefault])
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.print("v: " .. str, drawx, drawy)
+
+    -- draw a cool line
+    x2, y2 = cf.AddVectorToPoint(x1,y1,45,75)
+    x3, y3 = cf.AddVectorToPoint(x2,y2,45,75)
+    x4, y4 = cf.AddVectorToPoint(x3,y3,90,35)
+
+    love.graphics.line(x2,y2,x3,y3,x4,y4)
+
+	print(str, x1,y1)
 end
 
 return draw

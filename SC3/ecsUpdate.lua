@@ -27,7 +27,7 @@ local function getRequestedThrust()
     -- rememeber the deck is one entity with lots of components
 
     local thrust = 0
-    local allComponents = ECS_DECK[1]:getComponents()
+    local allComponents = ECS_DECK[2]:getComponents()
     for _, component in pairs(allComponents) do
         if component.selected then
             if component.thrust ~= nil then
@@ -68,7 +68,7 @@ function ecsUpdate.init()
                 requestedthrust = getRequestedThrust()      --! need to factor damaged reverse thrusters
                 physEntity = physics.getPhysEntity(PLAYER.UID)
 
-                if ECS_DECK[1].fullStop.selected then
+                if ECS_DECK[2].fullStop.selected then
                     local dx, dy = physEntity.body:getLinearVelocity()
                     if math.abs(dx) > 1 or math.abs(dy) > 1 then
                     else

@@ -40,14 +40,7 @@ function functions.loadDeck()
     local entity = fun.getEntity(PLAYER.UID)
     local allComponents = entity:getComponents()
     for _, component in pairs(allComponents) do
-        if component.label == "Main engine" then
-            -- add the engine cards to the deck
-            thisdeck:give("fullThrust")
-            thisdeck:give("halfThrust")
-            thisdeck:give("quarterThrust")
-            thisdeck:give("halfReverse")
-            thisdeck:give("fullStop")
-        end
+
         if component.label == "Side thrusters" then
             thisdeck:give("turnToNorth")
             thisdeck:give("turnToNorthEast")
@@ -57,6 +50,20 @@ function functions.loadDeck()
             thisdeck:give("turnToSouthWest")
             thisdeck:give("turnToWest")
             thisdeck:give("turnToNorthWest")
+        end
+    end
+    table.insert(ECS_DECK, thisdeck)
+
+    thisdeck = nil
+    thisdeck = concord.entity(ECSWORLD)
+    for _, component in pairs(allComponents) do
+        if component.label == "Main engine" then
+            -- add the engine cards to the deck
+            thisdeck:give("fullThrust")
+            thisdeck:give("halfThrust")
+            thisdeck:give("quarterThrust")
+            thisdeck:give("halfReverse")
+            thisdeck:give("fullStop")
         end
     end
     table.insert(ECS_DECK, thisdeck)
@@ -234,9 +241,11 @@ function functions.resetStage()
     end
 
     -- clear all the cards to 'unselected'
-    local allComponents = ECS_DECK[1]:getComponents()
-    for _, component in pairs(allComponents) do
-        component.selected = false
+    for i = 1, #ECS_DECK do
+        local allComponents = ECS_DECK[i]:getComponents()
+        for _, component in pairs(allComponents) do
+            component.selected = false
+        end
     end
 
     -- refill all components with capacity
