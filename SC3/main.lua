@@ -36,6 +36,7 @@ ecsUpdate = require 'ecsUpdate'
 keymaps = require 'keymaps'
 buttons = require 'buttons'
 physics = require 'physics'
+tut = require 'tutorial'
 
 function postSolve(a, b, coll, normalimpulse, tangentimpulse)
 	-- a is the first fixture
@@ -82,6 +83,7 @@ function love.keypressed( key, scancode, isrepeat )
 end
 
 function love.mousereleased( x, y, button, istouch, presses )
+	lovelyToasts.mousereleased(x, y, button)
 
 	local mybuttonID
 	local rx, ry = res.toGame(x,y)		-- does this need to be applied consistently across all mouse clicks?
@@ -128,9 +130,6 @@ function love.mousereleased( x, y, button, istouch, presses )
 					local entity = fun.getEntity(PLAYER.UID)
 					local crewsize = entity.crewQuarters.crewNumber
 					if fun.countCardsSelected() <= crewsize + 1 then
-
-						lovelyToasts.show("Hold on!",nil ,nil , 500, 500)
-
 						GAME_MODE = enum.gamemodeAction
 						buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
 						GAME_TIMER = GAME_TIMER_DEFAULT
@@ -183,6 +182,8 @@ function love.load()
 
 	res.setGame(SCREEN_WIDTH, SCREEN_HEIGHT)
 	lovelyToasts.canvasSize = { SCREEN_WIDTH, SCREEN_HEIGHT }
+	lovelyToasts.options.queueEnabled = true
+	lovelyToasts.options.tapToDismiss = true
 
 	if love.filesystem.isFused( ) then
         void = love.window.setMode(SCREEN_WIDTH, SCREEN_HEIGHT,{fullscreen=true,display=1,resizable=false, borderless=true})	-- display = monitor number (1 or 2)
@@ -200,6 +201,7 @@ function love.load()
 	buttons.load()			-- the buttons that are displayed on different gui's
 	keymaps.init()
     comp.init()
+	tutorial.init()			-- toast pop ups
 
 	cf.AddScreen(enum.sceneMainMenu, SCREEN_STACK)
 end
@@ -248,6 +250,11 @@ function love.update(dt)
 
 		if GAME_MODE == enum.gamemodePlanning then
 			--
+			if tutmsg[1].display then
+				lovelyToasts.show("Click me", 300, nil, 1800, 900)
+				tutmsg[1].display = false
+			end
+
 		elseif GAME_MODE == enum.gamemodeAction then
 			GAME_TIMER = GAME_TIMER - dt
 			ECSWORLD:emit("update", dt)

@@ -28,7 +28,6 @@ function constants.load()
     TRANSLATEY = 1
     ZOOMFACTOR = 1
 
-
     rotation_error_prior = 0
     rotation_integral_prior = 0
     rotation_value_out_prior = 0
