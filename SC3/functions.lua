@@ -12,6 +12,7 @@ function functions.establishPlayerECS()
     :give("battery")
     :give("oxyTank")
     :give("oxyGenerator")
+    :give("crewQuarters")
 
     table.insert(ECS_ENTITIES, entity)
     PLAYER.UID = entity.uid.value 		-- store this for easy recall
@@ -40,14 +41,7 @@ function functions.loadDeck()
     local entity = fun.getEntity(PLAYER.UID)
     local allComponents = entity:getComponents()
     for _, component in pairs(allComponents) do
-        if component.label == "Main engine" then
-            -- add the engine cards to the deck
-            thisdeck:give("fullThrust")
-            thisdeck:give("halfThrust")
-            thisdeck:give("quarterThrust")
-            thisdeck:give("halfReverse")
-            thisdeck:give("fullStop")
-        end
+
         if component.label == "Side thrusters" then
             thisdeck:give("turnToNorth")
             thisdeck:give("turnToNorthEast")
@@ -57,6 +51,20 @@ function functions.loadDeck()
             thisdeck:give("turnToSouthWest")
             thisdeck:give("turnToWest")
             thisdeck:give("turnToNorthWest")
+        end
+    end
+    table.insert(ECS_DECK, thisdeck)
+
+    thisdeck = nil
+    thisdeck = concord.entity(ECSWORLD)
+    for _, component in pairs(allComponents) do
+        if component.label == "Main engine" then
+            -- add the engine cards to the deck
+            thisdeck:give("fullThrust")
+            thisdeck:give("halfThrust")
+            thisdeck:give("quarterThrust")
+            thisdeck:give("halfReverse")
+            thisdeck:give("fullStop")
         end
     end
     table.insert(ECS_DECK, thisdeck)
@@ -234,9 +242,11 @@ function functions.resetStage()
     end
 
     -- clear all the cards to 'unselected'
-    local allComponents = ECS_DECK[1]:getComponents()
-    for _, component in pairs(allComponents) do
-        component.selected = false
+    for i = 1, #ECS_DECK do
+        local allComponents = ECS_DECK[i]:getComponents()
+        for _, component in pairs(allComponents) do
+            component.selected = false
+        end
     end
 
     -- refill all components with capacity
@@ -250,8 +260,20 @@ function functions.resetStage()
 
     -- clear the trail
     TRAIL = {}
+end
 
-
+function functions.countCardsSelected()
+    -- cycle through all the decks and return the number of cars selected
+    local result = 0
+    for i = 1, #ECS_DECK do
+        local allComponents = ECS_DECK[i]:getComponents()
+        for _, component in pairs(allComponents) do
+            if component.selected then
+                result = result + 1
+            end
+        end
+    end
+    return result
 end
 
 return functions

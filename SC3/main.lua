@@ -36,6 +36,7 @@ ecsUpdate = require 'ecsUpdate'
 keymaps = require 'keymaps'
 buttons = require 'buttons'
 physics = require 'physics'
+tut = require 'tutorial'
 
 function postSolve(a, b, coll, normalimpulse, tangentimpulse)
 	-- a is the first fixture
@@ -61,7 +62,6 @@ function love.keyreleased( key, scancode )
 		TRANSLATEY = (y1 * BOX2D_SCALE)
 		ZOOMFACTOR = 0.4
 	end
-
 end
 
 function love.keypressed( key, scancode, isrepeat )
@@ -83,6 +83,7 @@ function love.keypressed( key, scancode, isrepeat )
 end
 
 function love.mousereleased( x, y, button, istouch, presses )
+	lovelyToasts.mousereleased(x, y, button)
 
 	local mybuttonID
 	local rx, ry = res.toGame(x,y)		-- does this need to be applied consistently across all mouse clicks?
@@ -115,7 +116,7 @@ function love.mousereleased( x, y, button, istouch, presses )
 								component.selected = not component.selected
 								-- if target direction has changed then reset PID
 								if component.strength ~= nil then
-									integral = 0
+									integral = 0		--! see if this can be removed
 									previous_error = 0
 								end
 							end
@@ -123,20 +124,26 @@ function love.mousereleased( x, y, button, istouch, presses )
 					end
 				end
 
-				-- end turn if button is clicked
+				-- end turn button is clicked
 				if mybuttonID == enum.buttonEndTurn then
-					GAME_MODE = enum.gamemodeAction
-					buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
-					GAME_TIMER = GAME_TIMER_DEFAULT
+					-- check too many cards aren't clicked
+					local entity = fun.getEntity(PLAYER.UID)
+					local crewsize = entity.crewQuarters.crewNumber
+					if fun.countCardsSelected() <= crewsize + 1 then
+						GAME_MODE = enum.gamemodeAction
+						buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
+						GAME_TIMER = GAME_TIMER_DEFAULT
 
-					-- need to work out some rotation details
-
-					local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
-					if targetheading ~= nil then
-						-- STOP_HEADING is in radians with two decimal places
-						PLAYER.STOP_HEADING = cf.round(cf.convCompassToRad(targetheading),2)
+						-- need to work out some rotation details
+						local targetheading = fun.getDesiredHeading()                    -- returns desired compass heading
+						if targetheading ~= nil then
+							-- STOP_HEADING is in radians with two decimal places
+							PLAYER.STOP_HEADING = cf.round(cf.convCompassToRad(targetheading),2)
+						else
+							PLAYER.STOP_HEADING = nil
+						end
 					else
-						PLAYER.STOP_HEADING = nil
+						--! display a msg that says too many cards selected
 					end
 				end
 			end
@@ -174,6 +181,9 @@ function love.load()
 	constants.load()
 
 	res.setGame(SCREEN_WIDTH, SCREEN_HEIGHT)
+	lovelyToasts.canvasSize = { SCREEN_WIDTH, SCREEN_HEIGHT }
+	lovelyToasts.options.queueEnabled = true
+	lovelyToasts.options.tapToDismiss = true
 
 	if love.filesystem.isFused( ) then
         void = love.window.setMode(SCREEN_WIDTH, SCREEN_HEIGHT,{fullscreen=true,display=1,resizable=false, borderless=true})	-- display = monitor number (1 or 2)
@@ -191,6 +201,7 @@ function love.load()
 	buttons.load()			-- the buttons that are displayed on different gui's
 	keymaps.init()
     comp.init()
+	tutorial.init()			-- toast pop ups
 
 	cf.AddScreen(enum.sceneMainMenu, SCREEN_STACK)
 end
@@ -239,6 +250,11 @@ function love.update(dt)
 
 		if GAME_MODE == enum.gamemodePlanning then
 			--
+			if tutmsg[1].display then
+				lovelyToasts.show(tutmsg[1].txt, tutmsg[1].duration, nil, tutmsg[1].x, tutmsg[1].y)
+				tutmsg[1].display = false
+			end
+
 		elseif GAME_MODE == enum.gamemodeAction then
 			GAME_TIMER = GAME_TIMER - dt
 			ECSWORLD:emit("update", dt)

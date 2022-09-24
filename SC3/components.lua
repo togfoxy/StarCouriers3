@@ -69,6 +69,17 @@ local function initialiseShipComponents()
         c.destroyed = false
         c.description = "Makes O2 to keep you alive. Size " .. c.size .. ". Health " .. c.maxHP .. ". Draws " .. c.powerNeeds .. " per second."
     end)
+    concord.component("crewQuarters", function(c)
+        c.label = "Crew quarters"
+        c.crewNumber = 1
+        c.size = c.crewNumber
+        -- c.powerNeeds = love.math.random(1,3)        -- how much power per dt
+        -- c.maxHP = love.math.random(1,3) * 1000
+        -- c.currentHP = c.maxHP
+        -- c.purchasePrice = 1000
+        c.destroyed = false
+        c.description = "Extra crew is good. Crew size " .. c.size .. "."
+    end)
 
 end
 
