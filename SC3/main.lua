@@ -128,6 +128,9 @@ function love.mousereleased( x, y, button, istouch, presses )
 					local entity = fun.getEntity(PLAYER.UID)
 					local crewsize = entity.crewQuarters.crewNumber
 					if fun.countCardsSelected() <= crewsize + 1 then
+
+						lovelyToasts.show("Hold on!",nil ,nil , 500, 500)
+
 						GAME_MODE = enum.gamemodeAction
 						buttons.makeButtonInvisible(enum.buttonEndTurn, GUI_BUTTONS)
 						GAME_TIMER = GAME_TIMER_DEFAULT
@@ -179,6 +182,7 @@ function love.load()
 	constants.load()
 
 	res.setGame(SCREEN_WIDTH, SCREEN_HEIGHT)
+	lovelyToasts.canvasSize = { SCREEN_WIDTH, SCREEN_HEIGHT }
 
 	if love.filesystem.isFused( ) then
         void = love.window.setMode(SCREEN_WIDTH, SCREEN_HEIGHT,{fullscreen=true,display=1,resizable=false, borderless=true})	-- display = monitor number (1 or 2)
