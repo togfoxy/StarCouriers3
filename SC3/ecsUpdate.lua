@@ -110,24 +110,14 @@ function ecsUpdate.init()
                     desiredrads = desiredrads + (math.pi * 2)
                 end
 
-                -- while desiredrads < (math.pi * -2) do
-                --     desiredrads = desiredrads + (math.pi * 2)
-                -- end
-                -- while desiredrads > (math.pi * 2) do
-                --     desiredrads = desiredrads - (math.pi * 2)
-                -- end
-
-                print(currentrads, desiredrads)
-                print("*************")
+                -- print(currentrads, desiredrads)
+                -- print("*************")
 
                 assert(currentrads < math.pi * 2)
                 assert(currentrads > (math.pi * -2))
 
                 assert(desiredrads < math.pi * 3)   -- * 3 = 360 + 180 deg
                 assert(desiredrads > (math.pi * -3))
-
-                assert(PLAYER.STOP_HEADING < math.pi * 2)
-                assert(PLAYER.STOP_HEADING > (math.pi * -2))
 
                 if PLAYER.STOP_HEADING ~= nil then  -- radians
 
@@ -156,15 +146,6 @@ function ecsUpdate.init()
                             physEntity.body:applyTorque(entity.sideThrusters.strength * -1)
                             -- print("AV: " .. angularvelocity, "Output: " .. rotation_value_out, "turning left")
                         end
-
-                        -- if math.abs(error) <= 0.1 and math.abs(physEntity.body:getAngularVelocity()) <= 0.15 then
-                        --     physEntity.body:setAngle(cf.convCompassToRad(PLAYER.STOP_HEADING))
-                        --     physEntity.body:setAngularVelocity(0)
-                        --     PLAYER.STOP_HEADING = nil
-                        --     rotation_error_prior = 0
-                        --     rotation_integral_prior = 0
-                        --     rotation_value_out_prior = 0
-                        -- end
 
                     end
                 end

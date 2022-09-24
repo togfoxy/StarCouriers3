@@ -101,7 +101,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = 0.25          -- 100% = full thrust
-        c.quadnumber = nil          -- which quad to draw
+        c.quadnumber = 13          -- which quad to draw
     end)
     concord.component("fullStop", function(c)
         c.label = "Full stop"
@@ -109,7 +109,7 @@ local function initialiseDeckComponents()
         c.y = 0
         c.selected = false      -- true if clicked and ready to play
         c.thrust = -1.00          -- 100% = full thrust
-        c.quadnumber = nil           -- which quad to draw
+        c.quadnumber = 12           -- which quad to draw
     end)
     concord.component("halfReverse", function(c)
         c.label = "Half reverse"
