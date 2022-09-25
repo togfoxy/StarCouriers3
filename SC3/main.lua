@@ -250,10 +250,11 @@ function love.update(dt)
 
 		if GAME_MODE == enum.gamemodePlanning then
 			--
-			if tutmsg[1].display then
-				lovelyToasts.show(tutmsg[1].txt, tutmsg[1].duration, nil, tutmsg[1].x, tutmsg[1].y)
-				tutmsg[1].display = false
-			end
+			tut.displayMessage(2)
+			tut.displayMessage(1)
+			tut.displayMessage(3)
+			tut.displayMessage(4)
+			tut.displayMessage(5)
 
 		elseif GAME_MODE == enum.gamemodeAction then
 			GAME_TIMER = GAME_TIMER - dt
