@@ -72,7 +72,29 @@ function functions.loadDeck()
 end
 
 function functions.loadAudio()
+    -- AUDIO[enum.audioEngine] = love.audio.newSource("assets/audio/engine.ogg", "static")
+	-- AUDIO[enum.audioLowFuel] = love.audio.newSource("assets/audio/lowFuel.ogg", "static")
+	-- AUDIO[enum.audioWarning] = love.audio.newSource("assets/audio/507906__m-cel__warning-sound.ogg", "static")
+	-- AUDIO[enum.audioMiningLaser] = love.audio.newSource("assets/audio/223472__parabolix__underground-machine-heart-loop.mp3", "static")
+	-- AUDIO[enum.audioRockExplosion] = love.audio.newSource("assets/audio/cannon_hit.ogg", "static")
+	AUDIO[enum.audioRockScrape1] = love.audio.newSource("assets/audio/metalscrape1.mp3", "static")
+	AUDIO[enum.audioRockScrape2] = love.audio.newSource("assets/audio/metalscrape2.mp3", "static")
+	-- AUDIO[enum.audioDing] = love.audio.newSource("assets/audio/387232__steaq__badge-coin-win.wav", "static")
+	-- AUDIO[enum.audioWrong] = love.audio.newSource("assets/audio/wrong.mp3", "static")
 
+	-- bground music - asteroids
+	-- AUDIO[enum.audioBGSkismo] = love.audio.newSource("assets/music/Reflekt.mp3", "stream")
+
+	-- bground music - shop
+	-- AUDIO[enum.audioBGEric1] = love.audio.newSource("assets/music/Urban-Jungle-2061.mp3", "stream")
+	-- AUDIO[enum.audioBGEric2] = love.audio.newSource("assets/music/World-of-Automatons.mp3", "stream")
+
+	-- AUDIO[enum.audioRockExplosion]:setVolume(0.5)
+	AUDIO[enum.audioRockScrape1]:setVolume(0.5)
+	AUDIO[enum.audioRockScrape2]:setVolume(0.5)
+	-- AUDIO[enum.audioBGSkismo]:setVolume(0.5)
+	-- AUDIO[enum.audioBGEric1]:setVolume(0.5)
+	-- AUDIO[enum.audioDing]:setVolume(0.5)
 end
 
 function functions.loadImages()
@@ -274,6 +296,18 @@ function functions.countCardsSelected()
         end
     end
     return result
+end
+
+function functions.playSounds(dt)
+
+    for i = #SOUND, 1, -1 do
+        AUDIO[SOUND[i].enum]:play()
+        if SOUND[i].duration == nil or SOUND[i].duration <= 0 then
+            table.remove(SOUND, i)
+        else
+            SOUND[i].duration = SOUND[i].duration - dt
+        end
+    end
 end
 
 return functions

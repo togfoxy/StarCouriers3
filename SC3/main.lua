@@ -297,6 +297,7 @@ function love.update(dt)
 		cam:setZoom(ZOOMFACTOR)
     end
 
+	fun.playSounds(dt)
     lovelyToasts.update(dt)
     res.update()
 end

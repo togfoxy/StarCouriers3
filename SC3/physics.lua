@@ -285,6 +285,70 @@ function physics.cancelAngularVelocity(uid)
 	end
 end
 
+local function resolveCollision(uid1, uid2)
+	-- player has collided. Resolve damage
+	physicsEntity1 = physics.getPhysEntity(uid1)
+	physicsEntity2 = physics.getPhysEntity(uid2)
+	assert(physicsEntity1 ~= nil)
+	assert(physicsEntity2 ~= nil)
+
+	local mass1 = physicsEntity1.body:getMass( )
+	local mass2 = physicsEntity2.body:getMass( )
+	local totalmass = mass1 + mass2
+	local rndnum = love.math.random(1, totalmass)
+	if rndnum <= mass1 then
+		-- damage object1
+		if userdatatable1.objectType == "Player" or userdatatable1.objectType == "Pod" then
+			local entity = fun.getEntity(uid1)
+			local component = fun.getRandomComponent(entity)
+			print("Bravo: " .. component.currentHP, impactspeed)
+			component.currentHP = component.currentHP - impactspeed
+			print("Charlie: " .. component.currentHP)
+			print(component.label .. " is damaged.")
+			if component.currentHP <= 0 then
+				component.currentHP = 0
+				component.destroyed = true
+			end
+
+			-- queue scraping sound for playing during love.update
+			local snd = {}
+			local rndscrape = love.math.random(1,2)
+			if rndscrape == 1 then
+				snd.enum = enum.audioRockScrape1
+			else
+				snd.enum = enum.audioRockScrape2
+			end
+			table.insert(SOUND, snd)
+		end
+	else
+		-- damage object2
+		if userdatatable2.objectType == "Player" or userdatatable2.objectType == "Pod" then
+			local entity = fun.getEntity(uid2)
+			local component = fun.getRandomComponent(entity)
+			print("Delta: " .. component.currentHP, impactspeed)
+			component.currentHP = component.currentHP - impactspeed
+			print("Echo: " .. component.currentHP)
+			print(component.label .. " is damaged.")
+			if component.currentHP <= 0 then
+				component.currentHP = 0
+				component.destroyed = true
+			end
+			-- queue scraping sound for playing during love.update
+			local snd = {}
+			local rndscrape = love.math.random(1,2)
+			if rndscrape == 1 then
+				snd.enum = enum.audioRockScrape1
+			else
+				snd.enum = enum.audioRockScrape2
+			end
+			table.insert(SOUND, snd)
+		end
+	end
+
+
+
+end
+
 function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 
 	local uid1 = userdatatable1.uid
@@ -292,9 +356,9 @@ function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 
 	if userdatatable1.objectType == "Border" or userdatatable2.objectType == "Border" then
 		-- collision is with border. Do nothing.
-	elseif userdatatable1.objectType == "Starbase" or userdatatable2.objectType == "Starbase" then
+	elseif (userdatatable1.objectType == "Starbase" and userdatatable2.objectType == "Player") or
+			(userdatatable2.objectType == "Starbase" and userdatatable1.objectType == "Player") then
 		-- go to shop
-	print("alpha: " .. userdatatable1.objectType, userdatatable2.objectType)
 		TRANSLATEX = SCREEN_WIDTH / 2
 		TRANSLATEY = SCREEN_HEIGHT / 2
 		ZOOMFACTOR = 1
@@ -343,59 +407,11 @@ function physics.processCollision(userdatatable1, userdatatable2, impactspeed)
 		-- ALARM_OFF_TIMER = 0
 
 		cf.AddScreen(enum.sceneShop, SCREEN_STACK)
-	else
-		--! make this a function
-		-- collision with asteroids and players
-		physicsEntity1 = physics.getPhysEntity(uid1)
-		physicsEntity2 = physics.getPhysEntity(uid2)
-		assert(physicsEntity1 ~= nil)
-		assert(physicsEntity2 ~= nil)
 
-		local mass1 = physicsEntity1.body:getMass( )
-		local mass2 = physicsEntity2.body:getMass( )
-		local totalmass = mass1 + mass2
-		local rndnum = love.math.random(1, totalmass)
-		if rndnum <= mass1 then
-			-- damage object1
-			if userdatatable1.objectType == "Player" or userdatatable1.objectType == "Pod" then
-				local entity = fun.getEntity(uid1)
-				local component = fun.getRandomComponent(entity)
-				print("Bravo: " .. component.currentHP, impactspeed)
-				component.currentHP = component.currentHP - impactspeed
-				print("Charlie: " .. component.currentHP)
-				print(component.label .. " is damaged.")
-				if component.currentHP <= 0 then
-					component.currentHP = 0
-					component.destroyed = true
-				end
-				local rndscrape = love.math.random(1,2)
-				if rndscrape == 1 then
-					SOUND.scrape1 = true
-				else
-					SOUND.scrape2 = true
-				end
-			end
-		else
-			-- damage object2
-			if userdatatable2.objectType == "Player" or userdatatable2.objectType == "Pod" then
-				local entity = fun.getEntity(uid2)
-				local component = fun.getRandomComponent(entity)
-				print("Delta: " .. component.currentHP, impactspeed)
-				component.currentHP = component.currentHP - impactspeed
-				print("Echo: " .. component.currentHP)
-				print(component.label .. " is damaged.")
-				if component.currentHP <= 0 then
-					component.currentHP = 0
-					component.destroyed = true
-				end
-				local rndscrape = love.math.random(1,2)
-				if rndscrape == 1 then
-					SOUND.scrape1 = true
-				else
-					SOUND.scrape2 = true
-				end
-			end
-		end
+	elseif (userdatatable1.objectType == "Starbase" and userdatatable2.objectType == "Player") or
+			(userdatatable2.objectType == "Starbase" and userdatatable1.objectType == "Player") then
+		-- collision with asteroids and players
+		resolveCollision(uid1, uid2)
 	end
 end
 

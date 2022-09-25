@@ -210,26 +210,4 @@ function draw.HUD()
 	end
 end
 
-function draw.drawVelocity(str, x1, y1)
-    -- x1, y1 = the position of the entity
-    -- input string and screen coordinates
-    -- doesn't use entity etc
-
-    -- print the text
-    drawx = x1 + 150
-    drawy = y1 - 115
-    love.graphics.setFont(FONT[enum.fontDefault])
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.print("v: " .. str, drawx, drawy)
-
-    -- draw a cool line
-    x2, y2 = cf.AddVectorToPoint(x1,y1,45,75)
-    x3, y3 = cf.AddVectorToPoint(x2,y2,45,75)
-    x4, y4 = cf.AddVectorToPoint(x3,y3,90,35)
-
-    love.graphics.line(x2,y2,x3,y3,x4,y4)
-
-	print(str, x1,y1)
-end
-
 return draw
