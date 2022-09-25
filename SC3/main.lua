@@ -203,6 +203,7 @@ function love.load()
 	keymaps.init()
     comp.init()
 	tutorial.init()			-- toast pop ups
+	tutorial.load()			-- load tutorial history
 
 	cf.AddScreen(enum.sceneMainMenu, SCREEN_STACK)
 end

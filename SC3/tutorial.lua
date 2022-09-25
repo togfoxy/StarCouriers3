@@ -2,7 +2,7 @@ tutorial = {}
 
 function tutorial.init()
 
-    tutmsg = {}
+    tutmsg = {}             --! should be upper case for globals
     for i = 1, 50 do
         tutmsg[i] = {}
     end
@@ -52,6 +52,11 @@ function tutorial.displayMessage(msgNumber)
         fileops.saveTutorial()
     end
 
+end
+
+function tutorial.load()
+    -- loads the tutorial history from file to prevent old tut msgs appearing every session
+    fileops.loadTutorial()
 end
 
 

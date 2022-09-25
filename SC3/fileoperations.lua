@@ -22,4 +22,24 @@ function fileops.saveTutorial()
     print(success, message)
 end
 
+function fileops.loadTutorial()
+    local savedir = love.filesystem.getSourceBaseDirectory( )
+    if love.filesystem.isFused() then
+        savedir = savedir .. "\\savedata\\"
+    else
+        savedir = savedir .. "/SC3/savedata/"
+    end
+
+    local savefile = savedir .. "tutorial.dat"
+
+	if nativefs.getInfo(savefile) then
+		contents, size = nativefs.read(savefile)
+	    tutmsg = bitser.loads(contents)
+    else
+        error()
+    end
+
+end
+
+
 return fileops
