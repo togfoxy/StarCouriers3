@@ -32,7 +32,7 @@ constants = require 'constants'
 comp = require 'components'
 ecsDraw = require 'ecsDraw'
 ecsUpdate = require 'ecsUpdate'
--- fileops = require 'fileoperations'
+fileops = require 'fileoperations'
 keymaps = require 'keymaps'
 buttons = require 'buttons'
 physics = require 'physics'
@@ -184,6 +184,7 @@ function love.load()
 	lovelyToasts.canvasSize = { SCREEN_WIDTH, SCREEN_HEIGHT }
 	lovelyToasts.options.queueEnabled = true
 	lovelyToasts.options.tapToDismiss = true
+	lovelyToasts.style.backgroundColor = {151,151,151}
 
 	if love.filesystem.isFused( ) then
         void = love.window.setMode(SCREEN_WIDTH, SCREEN_HEIGHT,{fullscreen=true,display=1,resizable=false, borderless=true})	-- display = monitor number (1 or 2)

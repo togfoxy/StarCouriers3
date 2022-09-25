@@ -49,6 +49,7 @@ function tutorial.displayMessage(msgNumber)
     if tutmsg[msgNumber].display then
         lovelyToasts.show(tutmsg[msgNumber].txt, tutmsg[msgNumber].duration, tutmsg[msgNumber].position, tutmsg[msgNumber].x, tutmsg[msgNumber].y)
         tutmsg[msgNumber].display = false
+        fileops.saveTutorial()
     end
 
 end
