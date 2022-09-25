@@ -32,7 +32,7 @@ constants = require 'constants'
 comp = require 'components'
 ecsDraw = require 'ecsDraw'
 ecsUpdate = require 'ecsUpdate'
--- fileops = require 'fileoperations'
+fileops = require 'fileoperations'
 keymaps = require 'keymaps'
 buttons = require 'buttons'
 physics = require 'physics'
@@ -184,6 +184,7 @@ function love.load()
 	lovelyToasts.canvasSize = { SCREEN_WIDTH, SCREEN_HEIGHT }
 	lovelyToasts.options.queueEnabled = true
 	lovelyToasts.options.tapToDismiss = true
+	lovelyToasts.style.backgroundColor = {151,151,151}
 
 	if love.filesystem.isFused( ) then
         void = love.window.setMode(SCREEN_WIDTH, SCREEN_HEIGHT,{fullscreen=true,display=1,resizable=false, borderless=true})	-- display = monitor number (1 or 2)
@@ -202,6 +203,7 @@ function love.load()
 	keymaps.init()
     comp.init()
 	tutorial.init()			-- toast pop ups
+	tutorial.load()			-- load tutorial history
 
 	cf.AddScreen(enum.sceneMainMenu, SCREEN_STACK)
 end
@@ -250,10 +252,11 @@ function love.update(dt)
 
 		if GAME_MODE == enum.gamemodePlanning then
 			--
-			if tutmsg[1].display then
-				lovelyToasts.show(tutmsg[1].txt, tutmsg[1].duration, nil, tutmsg[1].x, tutmsg[1].y)
-				tutmsg[1].display = false
-			end
+			tut.displayMessage(2)
+			tut.displayMessage(1)
+			tut.displayMessage(3)
+			tut.displayMessage(4)
+			tut.displayMessage(5)
 
 		elseif GAME_MODE == enum.gamemodeAction then
 			GAME_TIMER = GAME_TIMER - dt
@@ -294,6 +297,7 @@ function love.update(dt)
 		cam:setZoom(ZOOMFACTOR)
     end
 
+	fun.playSounds(dt)
     lovelyToasts.update(dt)
     res.update()
 end

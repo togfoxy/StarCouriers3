@@ -1,1 +1,3 @@
 Please leave this file here
+Data is saved to a sub-folder of the game to assist in technical support and
+the porting of the game between devices (e.g. USB stick)

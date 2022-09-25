@@ -110,8 +110,8 @@ function ecsUpdate.init()
                     desiredrads = desiredrads + (math.pi * 2)
                 end
 
-                -- print(currentrads, desiredrads)
-                -- print("*************")
+                print(currentrads, desiredrads)
+                print("*************")
 
                 assert(currentrads < math.pi * 2)
                 assert(currentrads > (math.pi * -2))

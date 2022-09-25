@@ -22,7 +22,7 @@ local function drawVelocity(str, x1, y1)
     drawy = y1 - 115
     love.graphics.setFont(FONT[enum.fontDefault])
     love.graphics.setColor(1,1,1,1)
-    love.graphics.print(str, drawx, drawy)
+    love.graphics.print("v: " .. str, drawx, drawy)
 
     -- draw a cool line
     x2, y2 = cf.AddVectorToPoint(x1,y1,45,75)

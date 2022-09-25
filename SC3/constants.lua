@@ -52,6 +52,7 @@ function constants.load()
     QUAD_ARROWS = {}        -- for the cards
     SOUND = {}
     TRAIL = {}
+    AUDIO = {}
 
     enum = {}               -- global
     enum.sceneMainMenu = 1
@@ -73,6 +74,9 @@ function constants.load()
 
     enum.gamemodePlanning = 1
     enum.gamemodeAction = 2
+
+    enum.audioRockScrape1 = 1
+    enum.audioRockScrape2 = 2
 
     GAME_MODE = enum.gamemodePlanning
 
