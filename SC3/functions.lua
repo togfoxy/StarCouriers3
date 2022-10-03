@@ -81,9 +81,13 @@ function functions.loadAudio()
 	AUDIO[enum.audioRockScrape2] = love.audio.newSource("assets/audio/metalscrape2.mp3", "static")
 	-- AUDIO[enum.audioDing] = love.audio.newSource("assets/audio/387232__steaq__badge-coin-win.wav", "static")
 	-- AUDIO[enum.audioWrong] = love.audio.newSource("assets/audio/wrong.mp3", "static")
+	AUDIO[enum.audioRockThud1] = love.audio.newSource("assets/audio/215162__otisjames__thud.wav", "static")
+    AUDIO[enum.audioRockThud2] = love.audio.newSource("assets/audio/332668__reitanna__big-thud2.wav", "static")
+    AUDIO[enum.audioRockThud3] = love.audio.newSource("assets/audio/638616__captainyulef__thudfall.wav", "static")
+
 
 	-- bground music - asteroids
-	-- AUDIO[enum.audioBGSkismo] = love.audio.newSource("assets/music/Reflekt.mp3", "stream")
+	AUDIO[enum.audioBGSkismo] = love.audio.newSource("assets/music/Reflekt.mp3", "stream")
 
 	-- bground music - shop
 	-- AUDIO[enum.audioBGEric1] = love.audio.newSource("assets/music/Urban-Jungle-2061.mp3", "stream")

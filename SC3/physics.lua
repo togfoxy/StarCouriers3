@@ -314,27 +314,36 @@ local function resolveCollision(udt1, udt2, impactspeed)
 	local uid1 = udt1.uid
 	local uid2 = udt2.uid
 
-
 	physicsEntity1 = physics.getPhysEntity(uid1)
 	physicsEntity2 = physics.getPhysEntity(uid2)
 	assert(physicsEntity1 ~= nil)
 	assert(physicsEntity2 ~= nil)
 
-	local mass1 = physicsEntity1.body:getMass( )
-	local mass2 = physicsEntity2.body:getMass( )
-	local totalmass = mass1 + mass2
+	local mass1 = physicsEntity1.body:getMass( )	-- get a rnd num based on total mass
+	local mass2 = physicsEntity2.body:getMass( )	-- the target is the inverse ratio
+	local totalmass = mass1 + mass2					-- the smaller target is more likely to be damaged
 	local rndnum = love.math.random(1, totalmass)
 	if rndnum <= mass1 then
-		-- damage object1
+		-- damage object2 (inverse target)
 		if udt1.objectType == "Player" or udt1.objectType == "Pod" then		--! this pod bit not implemented
-			local entity = fun.getEntity(uid1)
-			damageEntity(entity, impactspeed)
-		end
-	else
-		-- damage object2
-		if udt2.objectType == "Player" or udt2.objectType == "Pod" then		--! this pod bit not implemented
 			local entity = fun.getEntity(uid2)
 			damageEntity(entity, impactspeed)
+		else
+			-- asteroid is hit. Play "thud" sound
+			local snd = {}
+			snd.enum = love.math.random(3,5)	-- this is enum 3,4,5
+			table.insert(SOUND, snd)
+		end
+	else
+		-- damage object1 (inverse target)
+		if udt2.objectType == "Player" or udt2.objectType == "Pod" then		--! this pod bit not implemented
+			local entity = fun.getEntity(uid1)
+			damageEntity(entity, impactspeed)
+		else
+			-- asteroid is hit. Play "thud" sound
+			local snd = {}
+			snd.enum = love.math.random(3,5)	-- this is enum 3,4,5
+			table.insert(SOUND, snd)
 		end
 	end
 end

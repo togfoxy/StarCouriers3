@@ -77,6 +77,12 @@ function constants.load()
 
     enum.audioRockScrape1 = 1
     enum.audioRockScrape2 = 2
+    enum.audioRockThud1 = 3
+    enum.audioRockThud2 = 4
+    enum.audioRockThud3 = 5
+
+
+    enum.audioBGSkismo = 100
 
     GAME_MODE = enum.gamemodePlanning
 
