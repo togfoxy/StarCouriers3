@@ -311,11 +311,11 @@ end
 local function resolveCollision(udt1, udt2, impactspeed)
 	-- player has collided. Resolve damage
 
-	local uid1 = udt1.uid
-	local uid2 = udt2.uid
+	-- local uid1 = udt1.uid
+	-- local uid2 = udt2.uid
 
-	physicsEntity1 = physics.getPhysEntity(uid1)
-	physicsEntity2 = physics.getPhysEntity(uid2)
+	physicsEntity1 = physics.getPhysEntity(udt1.uid)
+	physicsEntity2 = physics.getPhysEntity(udt2.uid)
 	assert(physicsEntity1 ~= nil)
 	assert(physicsEntity2 ~= nil)
 
@@ -325,25 +325,29 @@ local function resolveCollision(udt1, udt2, impactspeed)
 	local rndnum = love.math.random(1, totalmass)
 	if rndnum <= mass1 then
 		-- damage object2 (inverse target)
-		if udt1.objectType == "Player" or udt1.objectType == "Pod" then		--! this pod bit not implemented
-			local entity = fun.getEntity(uid2)
+		if udt2.objectType == "Player" or udt2.objectType == "Pod" then		--! this pod bit not implemented
+			local entity = fun.getEntity(udt2.uid)
+			print("sound scrape2")
 			damageEntity(entity, impactspeed)
 		else
 			-- asteroid is hit. Play "thud" sound
 			local snd = {}
 			snd.enum = love.math.random(3,5)	-- this is enum 3,4,5
 			table.insert(SOUND, snd)
+			print("sound thud 2")
 		end
 	else
 		-- damage object1 (inverse target)
-		if udt2.objectType == "Player" or udt2.objectType == "Pod" then		--! this pod bit not implemented
-			local entity = fun.getEntity(uid1)
+		if udt1.objectType == "Player" or udt1.objectType == "Pod" then		--! this pod bit not implemented
+			local entity = fun.getEntity(udt1.uid)
+			print("sound scrape1")
 			damageEntity(entity, impactspeed)
 		else
 			-- asteroid is hit. Play "thud" sound
 			local snd = {}
 			snd.enum = love.math.random(3,5)	-- this is enum 3,4,5
 			table.insert(SOUND, snd)
+			print("sound thud 1")
 		end
 	end
 end
