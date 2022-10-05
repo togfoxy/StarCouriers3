@@ -89,6 +89,15 @@ function ecsUpdate.init()
             if not entity.sideThrusters.destroyed then
 
                 local currentrads = cf.round(physEntity.body:getAngle(),2)
+
+                -- ensures the current rads is inside acceptable limits
+                while currentrads > 2 * math.pi do
+                    currentrads = currentrads - (2 * math.pi)
+                end
+                while currentrads < (-2 * math.pi) do
+                    currentrads = currentrads + (2 * math.pi)
+                end
+
                 local desiredrads = PLAYER.STOP_HEADING    -- desired heading
                 if desiredrads == nil then
                     desiredrads = currentrads

@@ -12,7 +12,7 @@ function constants.load()
     PLAYER_START_X = FIELD_WIDTH / 2
     PLAYER_START_Y = (FIELD_HEIGHT) - 175
 
-    GAME_STAGE = 1
+    GAME_STAGE = 10
     STARTING_ASTEROIDS = 10
     GAME_TIMER_DEFAULT = 5
     GAME_TIMER = GAME_TIMER_DEFAULT      -- loop for this many seconds
@@ -77,6 +77,12 @@ function constants.load()
 
     enum.audioRockScrape1 = 1
     enum.audioRockScrape2 = 2
+    enum.audioRockThud1 = 3
+    enum.audioRockThud2 = 4
+    enum.audioRockThud3 = 5
+
+
+    enum.audioBGSkismo = 100
 
     GAME_MODE = enum.gamemodePlanning
 
