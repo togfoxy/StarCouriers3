@@ -15,6 +15,13 @@ local function initialiseShipComponents()
         c.y = 10
     end)
 
+    concord.component("repairEngine", function(c)
+        c.label = "Repair engine"
+        c.selected = false
+        c.relatedComponent = "engine"
+        c.quadnumber = nil           -- which quad to draw
+    end)
+
     concord.component("engine", function(c)
         c.label = "Main engine"
         c.size = love.math.random(2,4)
@@ -26,6 +33,7 @@ local function initialiseShipComponents()
         c.description = "Main propulsion. Size " .. c.size .. ". Health " .. c.maxHP .. ". Thrust " .. c.strength .. "."
         c.x = -10
         c.y = 10
+        c.repairCard = "repairEngine"
     end)
     concord.component("sideThrusters", function(c)
 		c.label = "Side thrusters"
@@ -179,6 +187,8 @@ local function initialiseDeckComponents()
         c.targetheading = 315
         c.quadnumber = 5           -- which quad to draw
     end)
+
+
 
 end
 

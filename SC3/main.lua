@@ -260,6 +260,9 @@ function love.update(dt)
 
 		elseif GAME_MODE == enum.gamemodeAction then
 			GAME_TIMER = GAME_TIMER - dt
+
+			fun.processCards()		-- process the non-manuvour cards
+
 			ECSWORLD:emit("update", dt)
 			PHYSICSWORLD:update(dt) --this puts the world into motion
 

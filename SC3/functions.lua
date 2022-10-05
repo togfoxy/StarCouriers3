@@ -68,6 +68,19 @@ function functions.loadDeck()
         end
     end
     table.insert(ECS_DECK, thisdeck)
+
+    -- repairs
+    thisdeck = nil
+    thisdeck = concord.entity(ECSWORLD)
+    for _, component in pairs(allComponents) do
+        if component.currentHP ~= nil and component.currentHP < component.maxHP then
+            -- add a REPAIR card for this component
+            local str = "repair " .. component.label
+            thisdeck:give(component.repairCard)
+        end
+    end
+    table.insert(ECS_DECK, thisdeck)
+
     print("Deck prepared.")
 end
 
@@ -312,6 +325,41 @@ function functions.playSounds(dt)
             SOUND[i].duration = SOUND[i].duration - dt
         end
     end
+end
+
+function functions.processCards()
+
+    -- process the repair cards
+    local allComponents = ECS_DECK[3]:getComponents()       -- [3] is the repair cards
+    for _, component in pairs(allComponents) do
+        if component.selected then
+            -- have located a repair card that has been selected
+            component.selected = false
+            local relatedComponent = component.relatedComponent     -- this is a string
+
+            local playerEntity = fun.getEntity(PLAYER.UID)
+
+            if playerEntity:has(relatedComponent) and  playerEntity[relatedComponent].currentHP ~= nil then
+                playerEntity[relatedComponent].currentHP = playerEntity[relatedComponent].currentHP + love.math.random(10,100)
+                if playerEntity[relatedComponent].currentHP > playerEntity[relatedComponent].maxHP then
+                    playerEntity[relatedComponent].currentHP = playerEntity[relatedComponent].maxHP
+                    print("Hi")
+                else
+                    print("Ho " .. playerEntity[relatedComponent].maxHP)
+                end
+            else
+
+            end
+
+
+        end
+
+
+
+    end
+
+
+
 end
 
 return functions
